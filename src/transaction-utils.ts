@@ -32,8 +32,8 @@ export const formatTransaction = (
       const comment = line.comment ? `    ; ${line.comment}` : '';
       return i !== tx.value.expenselines.length - 1
         ? `  ${symb} ${line.account}    ${currency}${line.amount.toFixed(
-            2,
-          )}${comment}`
+          2,
+        )}${comment}`
         : `  ${symb} ${line.account}${comment}`;
     })
     .join('\n');
@@ -93,7 +93,7 @@ export const getCurrency = (
  */
 export const firstDate = (txs: EnhancedTransaction[]): Moment =>
   txs.reduce((prev, tx) => {
-    const current = window.moment(tx.value.date);
+    const current = window.moment(tx.value.date, ['YYYY-MM-DD', 'YYYY/MM/DD']);
     return current.isSameOrBefore(prev) ? current : prev;
   }, window.moment());
 
@@ -123,29 +123,29 @@ export type Filter = (tx: EnhancedTransaction) => boolean;
  */
 export const filterByAccount =
   (account: string): Filter =>
-  (tx: EnhancedTransaction): boolean =>
-    some(
-      tx.value.expenselines,
-      (line) =>
-        ('account' in line && line.account.startsWith(account)) ||
-        ('dealiasedAccount' in line &&
-          line.dealiasedAccount.startsWith(account)),
-    );
+    (tx: EnhancedTransaction): boolean =>
+      some(
+        tx.value.expenselines,
+        (line) =>
+          ('account' in line && line.account.startsWith(account)) ||
+          ('dealiasedAccount' in line &&
+            line.dealiasedAccount.startsWith(account)),
+      );
 
 export const filterByPayeeExact =
   (account: string): Filter =>
-  (tx: EnhancedTransaction): boolean =>
-    tx.value.payee === account;
+    (tx: EnhancedTransaction): boolean =>
+      tx.value.payee === account;
 
 export const filterByStartDate =
   (start: Moment): Filter =>
-  (tx) =>
-    start.isSameOrBefore(window.moment(tx.value.date));
+    (tx) =>
+      start.isSameOrBefore(window.moment(tx.value.date, ['YYYY-MM-DD', 'YYYY/MM/DD']));
 
 export const filterByEndDate =
   (end: Moment): Filter =>
-  (tx) =>
-    end.isSameOrAfter(window.moment(tx.value.date));
+    (tx) =>
+      end.isSameOrAfter(window.moment(tx.value.date, ['YYYY-MM-DD', 'YYYY/MM/DD']));
 
 /**
  * filterTransactions filters the provided transactions if _any_ of the provided

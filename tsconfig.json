@@ -1,5 +1,8 @@
 {
-  "include": [ "src/**/*", "tests/**/*" ],
+  "include": [
+    "src/**/*",
+    "tests/**/*"
+  ],
   "compilerOptions": {
     "strict": true,
     "baseUrl": ".",
@@ -13,6 +16,7 @@
     "allowJs": true,
     "moduleResolution": "node",
     "importHelpers": true,
+    "skipLibCheck": true,
     "lib": [
       "dom",
       "esnext"

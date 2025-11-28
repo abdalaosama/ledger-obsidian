@@ -197,8 +197,8 @@ const buildTableRows = (
 
   // Sort so most recent transactions come first
   tableRows.sort((a, b): number => {
-    const aDate = window.moment(a.date);
-    const bDate = window.moment(b.date);
+    const aDate = window.moment(a.date, ['YYYY-MM-DD', 'YYYY/MM/DD']);
+    const bDate = window.moment(b.date, ['YYYY-MM-DD', 'YYYY/MM/DD']);
     if (aDate.isSame(bDate)) {
       return 0;
     }

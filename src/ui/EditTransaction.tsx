@@ -338,37 +338,37 @@ export const EditTransaction: React.FC<{
     txType: isNew ? 'expense' : 'unknown',
     date: isNew
       ? window.moment().format('YYYY-MM-DD')
-      : window.moment(props.initialState.value.date).format('YYYY-MM-DD'),
+      : window.moment(props.initialState.value.date, ['YYYY-MM-DD', 'YYYY/MM/DD']).format('YYYY-MM-DD'),
     total: isNew ? '' : getTotalAsNum(props.initialState).toString(),
     lines: isNew
       ? [
-          {
-            id: 0,
-            account: '',
-            amount: '',
-            comment: '',
-            reconcile: '',
-          },
-          {
-            id: 1,
-            account: '',
-            amount: '',
-            comment: '',
-            reconcile: '',
-          },
-        ]
+        {
+          id: 0,
+          account: '',
+          amount: '',
+          comment: '',
+          reconcile: '',
+        },
+        {
+          id: 1,
+          account: '',
+          amount: '',
+          comment: '',
+          reconcile: '',
+        },
+      ]
       : props.initialState.value.expenselines
-          .filter((line): line is EnhancedExpenseLine => 'account' in line)
-          .map(
-            (line, i): Line => ({
-              id: i,
-              account: line.account,
-              amount: line.amount.toFixed(2),
-              comment: line.comment || '',
-              reconcile: line.reconcile,
-              currency: line.currency,
-            }),
-          ),
+        .filter((line): line is EnhancedExpenseLine => 'account' in line)
+        .map(
+          (line, i): Line => ({
+            id: i,
+            account: line.account,
+            amount: line.amount.toFixed(2),
+            comment: line.comment || '',
+            reconcile: line.reconcile,
+            currency: line.currency,
+          }),
+        ),
   };
 
   return (

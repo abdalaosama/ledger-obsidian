@@ -179,7 +179,7 @@ export const makeDailyAccountBalanceChangeMap = (
     new Map<string, number[]>();
   const makeDefaultBalanceList = (): number[] => [];
   transactions.forEach((tx) => {
-    const normalizedDate = window.moment(tx.value.date).format('YYYY-MM-DD');
+    const normalizedDate = window.moment(tx.value.date, ['YYYY-MM-DD', 'YYYY/MM/DD']).format('YYYY-MM-DD');
     const accounts = getWithDefault(
       txDateAccountMap,
       normalizedDate,

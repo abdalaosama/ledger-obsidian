@@ -12,7 +12,7 @@ import {
   sortAccountTree,
 } from '../src/transaction-utils';
 import { assert } from 'console';
-import * as moment from 'moment';
+import moment from 'moment';
 
 window.moment = moment;
 

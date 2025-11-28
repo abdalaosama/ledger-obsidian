@@ -57,7 +57,7 @@ export const bucketTransactions = (
   txs.forEach((tx) => {
     let prevBucket = firstBucketMoment;
     for (let i = 0; i < restBucketMoments.length; i++) {
-      const m = window.moment(tx.value.date);
+      const m = window.moment(tx.value.date, ['YYYY-MM-DD', 'YYYY/MM/DD']);
       if (m.isBefore(restBucketMoments[i])) {
         break;
       }

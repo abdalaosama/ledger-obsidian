@@ -10,7 +10,7 @@ import {
 } from '../src/parser';
 import { settingsWithDefaults } from '../src/settings';
 import { assert } from 'console';
-import * as moment from 'moment';
+import moment from 'moment';
 
 window.moment = moment;
 

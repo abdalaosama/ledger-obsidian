@@ -1,6 +1,6 @@
 import { bucketTransactions, makeBucketNames } from '../src/date-utils';
 import { EnhancedTransaction, FileBlock } from '../src/parser';
-import * as moment from 'moment';
+import moment from 'moment';
 
 window.moment = moment;
 
