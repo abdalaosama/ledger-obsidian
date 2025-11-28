@@ -95,7 +95,7 @@ const calcPlaceholderExpenseLineAmount = (
   );
   if (numEmptyLines === 0 && unassignedTotal !== 0) {
     return err(
-      'All expense lines assigned, however amounts do not balance to 0',
+      '所有支出行已分配，但金额总计不为 0',
     );
   }
   return ok((unassignedTotal / numEmptyLines).toFixed(2));
@@ -160,11 +160,11 @@ const ExpenseLine: React.FC<{
     const lastI = lines.length - 1;
     switch (formik.values.txType) {
       case 'expense':
-        return i !== lastI ? 'Expense' : 'Asset';
+        return i !== lastI ? '支出' : '资产';
       case 'income':
-        return i !== lastI ? 'Asset' : 'Expense';
+        return i !== lastI ? '资产' : '支出';
       case 'transfer':
-        return i !== lastI ? 'To' : 'From';
+        return i !== lastI ? '转入' : '转出';
     }
     return '';
   };
@@ -204,7 +204,7 @@ const ExpenseLine: React.FC<{
           className="flexGrow"
           component={TextSuggest}
           name={`lines.${i}.account`}
-          placeholder={getAccountName() + ' Account'}
+          placeholder={getAccountName() + ' 账户'}
           suggestions={getSuggestions()}
         />
         {i + 1 !== lines.length ? (
@@ -213,7 +213,7 @@ const ExpenseLine: React.FC<{
             component={CurrencyInputFormik}
             placeholder={calcPlaceholderExpenseLineAmount(
               formik.values,
-            ).unwrapOr('Error')}
+            ).unwrapOr('错误')}
             currencySymbol={props.currencySymbol}
             name={`lines.${i}.amount`}
           />
@@ -247,7 +247,7 @@ const ExpenseLine: React.FC<{
           className="flexGrow"
           type="text"
           name={`lines.${i}.comment`}
-          placeholder="Memo"
+          placeholder="备注"
         />
       </div>
     </ExpenseLineStyle>
@@ -373,13 +373,11 @@ export const EditTransaction: React.FC<{
 
   return (
     <FormStyles>
-      <h2>Add to Ledger</h2>
+      <h2>记一笔</h2>
 
       {props.displayFileWarning ? (
         <Warning>
-          Please rename your ledger file to end with the .ledger extension. Once
-          renamed, please update the configuration option in the Ledger plugin
-          settings.
+          请将您的 Ledger 文件重命名为以 .ledger 结尾。重命名后，请在 Ledger 插件设置中更新配置选项。
         </Warning>
       ) : null}
 
@@ -390,19 +388,19 @@ export const EditTransaction: React.FC<{
           const errors: ValueErrors = {};
 
           if (values.date === '') {
-            errors.date = 'Required';
+            errors.date = '必填';
           }
           if (values.total === '') {
-            errors.total = 'Required';
+            errors.total = '必填';
           } else if (Number.isNaN(parseFloat(values.total))) {
-            errors.total = 'Total must be a number';
+            errors.total = '总金额必须是数字';
           }
           if (values.txType !== 'transfer' && values.payee === '') {
-            errors.payee = 'Required';
+            errors.payee = '必填';
           }
 
           if (values.lines.some((line) => line.account === '')) {
-            errors.lines = 'All expense lines must specify an account';
+            errors.lines = '所有行必须指定账户';
           }
 
           if (values.lines.filter((line) => line.amount === '').length === 0) {
@@ -412,9 +410,9 @@ export const EditTransaction: React.FC<{
               0,
             );
             if (sum !== 0) {
-              errors.lines = `Amounts add up to $${sum.toFixed(
+              errors.lines = `金额总计 $${sum.toFixed(
                 2,
-              )} but must add up to $0`;
+              )} 但必须为 $0`;
             }
           }
 
@@ -488,9 +486,9 @@ export const EditTransaction: React.FC<{
                     name="txType"
                     component={ButtonGroup}
                     options={[
-                      ['expense', 'Expense'],
-                      ['income', 'Income'],
-                      ['transfer', 'Transfer'],
+                      ['expense', '支出'],
+                      ['income', '收入'],
+                      ['transfer', '转账'],
                     ]}
                   />
                 </Margin>
@@ -500,11 +498,11 @@ export const EditTransaction: React.FC<{
                       component={CurrencyInputFormik}
                       currencySymbol={props.currencySymbol}
                       name="total"
-                      placeholder="Total Amount"
+                      placeholder="总金额"
                     />
                     <ErrorMessage name="total" component="div" />
                   </Margin>
-                  <Margin className="flexShrink">on</Margin>
+                  <Margin className="flexShrink">于</Margin>
                   <Margin className="flexGrow">
                     <Field type="date" name="date" />
                     <ErrorMessage name="date" component="div" />
@@ -515,7 +513,7 @@ export const EditTransaction: React.FC<{
                     <Field
                       component={TextSuggest}
                       name="payee"
-                      placeholder="Payee (e.g. Obsidian.md)"
+                      placeholder="收款人 (例如: Obsidian.md)"
                       suggestions={props.txCache.payees}
                     />
                     <ErrorMessage name="payee" component="div" />
@@ -608,7 +606,7 @@ export const EditTransaction: React.FC<{
                     Back
                   </button>
                   <button type="submit" disabled={formik.isSubmitting}>
-                    Submit
+                    提交
                   </button>
                 </>
               )}

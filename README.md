@@ -16,6 +16,18 @@ safely in your Obsidian Vault instead.
 - [ ] Reporting (In progress!)
 - [ ] Account reconciliation (planned soon!)
 
+## Release Notes
+
+### 0.4.0 (2025-11-27)
+- **UI Refinement**:
+    - Optimized chart legend styles (smaller size, better contrast, top aligned).
+    - Improved date formatting on chart axes (Day/Week/Month specific formats).
+    - Added customizable dashboard title setting.
+    - Simplified view selection buttons (日视图/周视图/月视图).
+- **Chart Tooltips**: Added hover tooltips to charts showing detailed date, account, and value information.
+- **Localization**: Completed Chinese translation for UI elements.
+- **Fixes**: Corrected date range logic for different views and improved chart rendering.
+
 ![Demo](https://raw.githubusercontent.com/tgrosinger/ledger-obsidian/main/resources/screenshots/demo.gif)
 
 ## More Info

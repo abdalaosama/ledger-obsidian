@@ -47,14 +47,14 @@ export const MobileTransactionEntry: React.FC<{
   );
   if (nonCommentLines.length < 2) {
     // This should not make it past the parser, but this is necessary for type checking.
-    throw new Error('Unexpected transaction with fewer than two account lines');
+    throw new Error('意外的交易：账户行少于两行');
   }
 
   return (
     <div>
       <h3>{props.tx.value.payee}</h3>
-      <div>From: {(nonCommentLines.last() as EnhancedExpenseLine).account}</div>
-      <div>Amount: {getTotal(props.tx, props.currencySymbol)}</div>
+      <div>从: {(nonCommentLines.last() as EnhancedExpenseLine).account}</div>
+      <div>金额: {getTotal(props.tx, props.currencySymbol)}</div>
     </div>
   );
 };
@@ -169,7 +169,7 @@ const buildTableRows = (
     if (nonCommentLines.length < 2) {
       // This should not make it past the parser, but this is necessary for type checking.
       throw new Error(
-        'Unexpected transaction with fewer than two account lines',
+        '意外的交易：账户行少于两行',
       );
     }
 
@@ -190,7 +190,7 @@ const buildTableRows = (
       payee: tx.value.payee,
       total: getTotal(tx, currencySymbol),
       from: nonCommentLines[nonCommentLines.length - 1].account,
-      to: <i>Multiple</i>,
+      to: <i>多账户</i>,
       actions: makeClone(tx),
     };
   });
@@ -237,7 +237,7 @@ export const RecentTransactionList: React.FC<{
   }, [props.txCache, props.startDate, props.endDate]);
   return (
     <>
-      <h2>Last 10 Transactions for Selected Dates</h2>
+      <h2>所选日期的最近 10 笔交易</h2>
       <TransactionTable data={data} />
     </>
   );
@@ -282,29 +282,29 @@ const TransactionTable: React.FC<{
 }> = ({ data }): JSX.Element => {
   if (data.length === 0) {
     // TODO: Style and center this
-    return <p>No transactions for the selected time period.</p>;
+    return <p>所选时间段内无交易。</p>;
   }
 
   const columns = React.useMemo<Column[]>(
     () => [
       {
-        Header: 'Date',
+        Header: '日期',
         accessor: 'date',
       },
       {
-        Header: 'Payee',
+        Header: '收款人',
         accessor: 'payee',
       },
       {
-        Header: 'Total',
+        Header: '总计',
         accessor: 'total',
       },
       {
-        Header: 'From Account',
+        Header: '转出账户',
         accessor: 'from',
       },
       {
-        Header: 'To Account',
+        Header: '转入账户',
         accessor: 'to',
       },
       {

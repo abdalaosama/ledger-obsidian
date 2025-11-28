@@ -1,6 +1,4 @@
 const defaultSettings: ISettings = {
-  tutorialIndex: 0,
-
   currencySymbol: '$',
   ledgerFile: 'transactions.ledger',
 
@@ -8,11 +6,12 @@ const defaultSettings: ISettings = {
   expenseAccountsPrefix: 'Expenses',
   incomeAccountsPrefix: 'Income',
   liabilityAccountsPrefix: 'Liabilities',
+  dashboardTitle: 'Ledger 账本',
+  chartAdaptiveYAxis: true,
+  defaultChartMode: 'balance',
 };
 
 export interface ISettings {
-  tutorialIndex: number;
-
   currencySymbol: string;
   ledgerFile: string;
 
@@ -20,6 +19,9 @@ export interface ISettings {
   expenseAccountsPrefix: string;
   incomeAccountsPrefix: string;
   liabilityAccountsPrefix: string;
+  dashboardTitle: string;
+  chartAdaptiveYAxis: boolean;
+  defaultChartMode: 'balance' | 'pnl';
 }
 
 export const settingsWithDefaults = (

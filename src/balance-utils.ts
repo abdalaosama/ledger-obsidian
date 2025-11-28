@@ -6,6 +6,7 @@ import { Moment } from 'moment';
 export type ChartData = {
   x: string | number | Date;
   y: number;
+  meta?: any;
 }[];
 
 const calcNetWorth = (
@@ -31,6 +32,10 @@ export const makeNetWorthData = (
     return {
       x: bucket,
       y: netWorth,
+      meta: {
+        account: '净资产',
+        date: bucket,
+      },
     };
   });
 
@@ -53,7 +58,14 @@ export const makeBalanceData = (
       0,
     );
 
-    return { x: bucket, y: balance };
+    return {
+      x: bucket,
+      y: balance,
+      meta: {
+        account: account,
+        date: bucket,
+      },
+    };
   });
 };
 
@@ -80,7 +92,14 @@ export const makeDeltaData = (
       return b2 - b1 + prev;
     }, 0);
 
-    return { x: bucket, y: balance };
+    return {
+      x: bucket,
+      y: balance,
+      meta: {
+        account: account,
+        date: bucket,
+      },
+    };
   });
 };
 

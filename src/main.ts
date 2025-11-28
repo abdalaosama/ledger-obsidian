@@ -46,7 +46,7 @@ export default class LedgerPlugin extends Plugin {
     this.addSettingTab(new SettingsTab(this));
 
     addIcon('ledger', billIcon);
-    this.addRibbonIcon('ledger', 'Add to Ledger', async () => {
+    this.addRibbonIcon('ledger', '记一笔', async () => {
       const ledgerFile = await this.createLedgerFileIfMissing();
       new LedgerModifier(this, ledgerFile).openExpenseModal('new');
     });
@@ -94,7 +94,7 @@ export default class LedgerPlugin extends Plugin {
               menu
                 .addItem((item) => {
                   item
-                    .setTitle('Open as Ledger file')
+                    .setTitle('作为 Ledger 文件打开')
                     .setIcon('ledger')
                     .onClick(() => {
                       const state = this.leaf.view.getState();
@@ -115,7 +115,7 @@ export default class LedgerPlugin extends Plugin {
 
     this.addCommand({
       id: 'ledger-add-transaction',
-      name: 'Add to Ledger',
+      name: '记一笔',
       icon: 'ledger',
       callback: async () => {
         const ledgerFile = await this.createLedgerFileIfMissing();
@@ -125,20 +125,12 @@ export default class LedgerPlugin extends Plugin {
 
     this.addCommand({
       id: 'ledger-open-dashboard',
-      name: 'Open Ledger dashboard',
+      name: '打开 Ledger 面板',
       icon: 'ledger',
       callback: this.openLedgerDashboard,
     });
 
-    this.addCommand({
-      id: 'ledger-intro-tutorial',
-      name: 'Reset Ledger Tutorial progress',
-      icon: 'ledger',
-      callback: () => {
-        this.settings.tutorialIndex = 0;
-        this.saveData(this.settings);
-      },
-    });
+
 
     this.app.workspace.onLayoutReady(() => {
       this.updateTransactionCache();

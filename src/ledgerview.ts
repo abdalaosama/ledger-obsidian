@@ -22,7 +22,7 @@ export class LedgerView extends TextFileView {
     this.currentFilePath = null;
     this.updateInterface = null;
 
-    this.addAction('pencil', 'Switch to Markdown View', () => {
+    this.addAction('pencil', '切换到 Markdown 视图', () => {
       const state = leaf.view.getState();
       leaf.setViewState(
         {
@@ -46,7 +46,7 @@ export class LedgerView extends TextFileView {
   }
 
   public getDisplayText(): string {
-    return 'Ledger';
+    return this.plugin.settings.dashboardTitle;
   }
 
   public getIcon(): string {
@@ -118,8 +118,6 @@ export class LedgerView extends TextFileView {
     if (this.currentFilePath && this.updateInterface) {
       ReactDOM.render(
         React.createElement(LedgerDashboard, {
-          tutorialIndex: this.plugin.settings.tutorialIndex,
-          setTutorialIndex: this.setTutorialIndex,
           settings: this.plugin.settings,
           txCache: this.txCache,
           updater: this.updateInterface,
@@ -129,14 +127,11 @@ export class LedgerView extends TextFileView {
     } else {
       contentEl.empty();
       const span = contentEl.createSpan();
-      span.setText('Loading...');
+      span.setText('加载中...');
     }
   };
 
-  private readonly setTutorialIndex = (index: number): void => {
-    this.plugin.settings.tutorialIndex = index;
-    this.plugin.saveData(this.plugin.settings);
-  };
+
 
   private readonly handleTxCacheUpdate = (txCache: TransactionCache): void => {
     console.debug('Ledger: received an updated txCache for dashboard');

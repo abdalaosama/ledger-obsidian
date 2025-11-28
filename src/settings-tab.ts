@@ -1,4 +1,3 @@
-import { buyMeACoffee, paypal } from './graphics';
 import LedgerPlugin from './main';
 import { PluginSettingTab, Setting } from 'obsidian';
 
@@ -14,11 +13,11 @@ export class SettingsTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    containerEl.createEl('h2', { text: 'Ledger Plugin - Settings' });
+    containerEl.createEl('h2', { text: 'Ledger 插件 - 设置' });
 
     new Setting(containerEl)
-      .setName('Currency Symbol')
-      .setDesc('Prefixes all transaction amounts')
+      .setName('货币符号')
+      .setDesc('所有交易金额的前缀')
       .addText((text) => {
         text.setPlaceholder('$').setValue(this.plugin.settings.currencySymbol);
         text.inputEl.onblur = (e: FocusEvent) => {
@@ -30,9 +29,48 @@ export class SettingsTab extends PluginSettingTab {
       });
 
     new Setting(containerEl)
-      .setName('Ledger File')
+      .setName('面板标题')
+      .setDesc('Ledger 面板顶部显示的标题')
+      .addText((text) => {
+        text.setValue(this.plugin.settings.dashboardTitle);
+        text.inputEl.onblur = async (e: FocusEvent) => {
+          const newValue = (e.target as HTMLInputElement).value;
+          this.plugin.settings.dashboardTitle = newValue;
+          await this.plugin.saveData(this.plugin.settings);
+        };
+      });
+
+    containerEl.createEl('h3', '图表设置');
+
+    new Setting(containerEl)
+      .setName('自适应Y轴')
+      .setDesc('自动调整Y轴范围以放大显示小变化，更易观察趋势')
+      .addToggle((toggle) => {
+        toggle.setValue(this.plugin.settings.chartAdaptiveYAxis);
+        toggle.onChange(async (value) => {
+          this.plugin.settings.chartAdaptiveYAxis = value;
+          await this.plugin.saveData(this.plugin.settings);
+        });
+      });
+
+    new Setting(containerEl)
+      .setName('默认图表模式')
+      .setDesc('选择账户页面默认显示的图表类型')
+      .addDropdown((dropdown) => {
+        dropdown
+          .addOption('balance', '账户余额')
+          .addOption('pnl', '盈亏')
+          .setValue(this.plugin.settings.defaultChartMode)
+          .onChange(async (value) => {
+            this.plugin.settings.defaultChartMode = value as 'balance' | 'pnl';
+            await this.plugin.saveData(this.plugin.settings);
+          });
+      });
+
+    new Setting(containerEl)
+      .setName('Ledger 文件')
       .setDesc(
-        'Path in the Vault to your Ledger file. NOTE: If you use Obsidian Sync, you must enable "Sync all other types".',
+        'Ledger 文件在仓库中的路径。注意：如果您使用 Obsidian Sync，必须启用“同步所有其他类型”。',
       )
       .addText((text) => {
         text
@@ -47,23 +85,17 @@ export class SettingsTab extends PluginSettingTab {
             this.plugin.settings.ledgerFile = newValue;
             this.plugin.saveData(this.plugin.settings);
           } else {
-            target.setCustomValidity('File must end with .ledger');
+            target.setCustomValidity('文件必须以 .ledger 结尾');
           }
           target.reportValidity();
         };
       });
 
-    containerEl.createEl('h3', 'Transaction Account Prefixes');
-
-    containerEl.createEl('p', {
-      text: "Ledger uses accounts to group expense types. Accounts are grouped into a hierarchy by separating with a colon. For example 'expenses:food:grocery' and 'expenses:food:restaurants",
-    });
+    containerEl.createEl('h3', '交易账户前缀');
 
     new Setting(containerEl)
-      .setName('Asset Account Prefix')
-      .setDesc(
-        'The account prefix used for grouping asset accounts. If you use aliases in your Ledger file, this must be the **unaliased** account prefix. e.g. "Assets" instead of "a"',
-      )
+      .setName('资产账户')
+      .setDesc('资产账户的前缀')
       .addText((text) => {
         text.setValue(this.plugin.settings.assetAccountsPrefix);
         text.inputEl.onblur = (e: FocusEvent) => {
@@ -75,10 +107,8 @@ export class SettingsTab extends PluginSettingTab {
       });
 
     new Setting(containerEl)
-      .setName('Expense Account Prefix')
-      .setDesc(
-        'The account prefix used for grouping expense accounts. If you use aliases in your Ledger file, this must be the **unaliased** account prefix. e.g. "Expenses" instead of "e"',
-      )
+      .setName('支出账户')
+      .setDesc('支出账户的前缀')
       .addText((text) => {
         text.setValue(this.plugin.settings.expenseAccountsPrefix);
         text.inputEl.onblur = (e: FocusEvent) => {
@@ -90,10 +120,8 @@ export class SettingsTab extends PluginSettingTab {
       });
 
     new Setting(containerEl)
-      .setName('Income Account Prefix')
-      .setDesc(
-        'The account prefix used for grouping income accounts. If you use aliases in your Ledger file, this must be the **unaliased** account prefix. e.g. "Income" instead of "i"',
-      )
+      .setName('收入账户')
+      .setDesc('收入账户的前缀')
       .addText((text) => {
         text.setValue(this.plugin.settings.incomeAccountsPrefix);
         text.inputEl.onblur = (e: FocusEvent) => {
@@ -105,10 +133,8 @@ export class SettingsTab extends PluginSettingTab {
       });
 
     new Setting(containerEl)
-      .setName('Liability Account Prefix')
-      .setDesc(
-        'The account prefix used for grouping liability accounts. If you use aliases in your Ledger file, this must be the **unaliased** account prefix. e.g. "Liabilities" instead of "l"',
-      )
+      .setName('负债账户')
+      .setDesc('负债账户的前缀')
       .addText((text) => {
         text.setValue(this.plugin.settings.liabilityAccountsPrefix);
         text.inputEl.onblur = (e: FocusEvent) => {
@@ -119,39 +145,7 @@ export class SettingsTab extends PluginSettingTab {
         };
       });
 
-    const div = containerEl.createEl('div', {
-      cls: 'ledger-donation',
-    });
-
-    const donateText = document.createElement('p');
-    donateText.appendText(
-      'If this plugin adds value for you and you would like to help support ' +
-        'continued development, please use the buttons below:',
-    );
-    div.appendChild(donateText);
-
-    const parser = new DOMParser();
-
-    div.appendChild(
-      createDonateButton(
-        'https://paypal.me/tgrosinger',
-        parser.parseFromString(paypal, 'text/xml').documentElement,
-      ),
-    );
-
-    div.appendChild(
-      createDonateButton(
-        'https://www.buymeacoffee.com/tgrosinger',
-        parser.parseFromString(buyMeACoffee, 'text/xml').documentElement,
-      ),
-    );
   }
 }
 
-const createDonateButton = (link: string, img: HTMLElement): HTMLElement => {
-  const a = document.createElement('a');
-  a.setAttribute('href', link);
-  a.addClass('ledger-donate-button');
-  a.appendChild(img);
-  return a;
-};
+

@@ -15,7 +15,9 @@ const TreeRow = styled.div`
   align-items: stretch;
 
   .selected {
-    background-color: var(--background-secondary);
+    background-color: var(--interactive-accent);
+    color: var(--text-on-accent);
+    font-weight: bold;
   }
 `;
 
@@ -101,16 +103,16 @@ const Tree: React.FC<{
       </TreeRow>
       {hasChildren && expanded && subRows
         ? subRows.map((child) => (
-            <Tree
-              txCache={props.txCache}
-              settings={props.settings}
-              data={child}
-              key={child.id}
-              depth={props.depth + 1}
-              selectedAccounts={props.selectedAccounts}
-              setSelectedAccounts={props.setSelectedAccounts}
-            />
-          ))
+          <Tree
+            txCache={props.txCache}
+            settings={props.settings}
+            data={child}
+            key={child.id}
+            depth={props.depth + 1}
+            selectedAccounts={props.selectedAccounts}
+            setSelectedAccounts={props.setSelectedAccounts}
+          />
+        ))
         : null}
     </>
   );
