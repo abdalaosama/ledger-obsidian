@@ -5,6 +5,8 @@ import type { TransactionCache } from './parser';
 import { ISettings, settingsWithDefaults } from './settings';
 import { SettingsTab } from './settings-tab';
 import { ReconcileModal } from './reconcile-modal';
+import { AdjustBalanceModal } from './AdjustBalanceModal';
+
 
 import type { default as MomentType } from 'moment';
 import { around } from 'monkey-around';
@@ -121,6 +123,16 @@ export default class LedgerPlugin extends Plugin {
       },
     });
 
+    this.addCommand({
+      id: 'ledger-adjust-balance',
+      name: '开始对账',
+      icon: 'calculator',
+      callback: () => {
+        new AdjustBalanceModal(this).open();
+      },
+    });
+
+
     this.app.workspace.onLayoutReady(() => {
       this.updateTransactionCache();
     });
@@ -231,10 +243,10 @@ ${window.moment().format('YYYY-MM-DD')} Starting Balances
 ; mobile phone homescreen. See the README for more information.
 
 ; If you have questions, please use the Github discussions:
-;     https://github.com/tgrosinger/ledger-obsidian/discussions/landing
+;     https://github.com/Elo-Mario/ledger-obsidian/discussions/landing
 ; If you encounter issues, please search the existing Github issues,
 ; and create a new one if your issue has not already been solved.
-;     https://github.com/tgrosinger/ledger-obsidian/issues
+;     https://github.com/Elo-Mario/ledger-obsidian/issues
 `;
 
   /**

@@ -1,8 +1,8 @@
 {
   "id": "ledger-obsidian",
   "name": "Ledger",
-  "author": "Tony Grosinger",
-  "authorUrl": "https://grosinger.net",
+  "author": "Elo-Mario",
+  "authorUrl": "https://github.com/Elo-Mario",
   "description": "Plain text accounting",
   "isDesktopOnly": false,
   "version": "0.4.8",

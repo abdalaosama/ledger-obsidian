@@ -98,6 +98,10 @@ export const SankeyChart: React.FC<SankeyChartProps> = ({ data, currencySymbol }
                     } else if (name.includes('余额消费')) {
                         color = '#3B82F6';  // 蓝色
                     }
+                    // 右侧逻辑 - 债务偿还
+                    else if (name.includes('债务偿还') || name.includes('Repayment')) {
+                        color = '#F97316';  // 橙色（债务偿还）
+                    }
                     // 右侧逻辑 - 所有支出类别变绿
                     else if (name.includes('支出') || name.includes('Expense') ||
                         name.includes('保障') || name.includes('餐饮') ||

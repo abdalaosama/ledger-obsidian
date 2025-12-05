@@ -135,6 +135,7 @@ export class DashboardDataService {
         // Step 1: Aggregation
         const incomeCategories = new Map<string, number>();
         const expenseCategories = new Map<string, number>();
+        const repaymentCategories = new Map<string, number>();
 
         const monthTransactions = this.txCache.transactions.filter((tx) => {
             const txDate = window.moment(tx.value.date, ['YYYY-MM-DD', 'YYYY/MM/DD']);
@@ -155,15 +156,26 @@ export class DashboardDataService {
                 } else if (account.includes('Expense') || account.includes('支出')) {
                     const current = expenseCategories.get(category) || 0;
                     expenseCategories.set(category, current + line.amount);
+                } else if ((account.includes('Liabilities') || account.includes('负债')) && line.amount > 0) {
+                    // Identify debt repayment: Liabilities account with positive amount (debt decrease)
+                    const current = repaymentCategories.get(category) || 0;
+                    repaymentCategories.set(category, current + line.amount);
                 }
             });
         });
 
         const totalIncome = Array.from(incomeCategories.values()).reduce((sum, val) => sum + val, 0);
         const totalExpense = Array.from(expenseCategories.values()).reduce((sum, val) => sum + val, 0);
+        const totalRepayment = Array.from(repaymentCategories.values()).reduce((sum, val) => sum + val, 0);
 
         // Step 2: Accounting Balancing
-        const delta = totalIncome - totalExpense;
+        // Updated formula: Savings = Income - Expense - Repayment
+        const delta = totalIncome - totalExpense - totalRepayment;
+
+        // Add debt repayment to target nodes (right side)
+        if (totalRepayment > 0) {
+            expenseCategories.set('债务偿还', totalRepayment);
+        }
 
         if (delta >= 0) {
             // Surplus: add "Savings" node to the right (target)

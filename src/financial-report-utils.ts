@@ -514,7 +514,7 @@ export function getTransactionsWithAccounts(
         });
     });
 
-    return transactions;
+    return transactions.reverse();
 }
 
 /**

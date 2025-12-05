@@ -28,9 +28,16 @@ const ChartContainer = styled.div`
 `;
 
 const ChartTitle = styled.h3`
-  margin: 0 0 12px 0;
+  margin: 0 0 8px 0;
   font-size: 16px;
   color: var(--text-normal);
+`;
+
+const TotalText = styled.div`
+  padding: 12px 8px 8px 5%;
+  font-size: 14px;
+  color: var(--text-normal);
+  text-align: left;
 `;
 
 interface DualTreemapProps {
@@ -44,22 +51,20 @@ export const DualTreemap: React.FC<DualTreemapProps> = ({
     liabilitiesData,
     currencySymbol,
 }) => {
-    const [refreshKey, setRefreshKey] = React.useState(0);
-
-    // Listen for theme changes
-    React.useEffect(() => {
-        const cleanup = observeThemeChange(() => {
-            setRefreshKey(prev => prev + 1); // Force re-render
-        });
-        return cleanup;
-    }, []);
-
     const formatCurrency = (value: number) => {
         return `${currencySymbol}${value.toLocaleString('zh-CN', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
         })}`;
     };
+
+    // Calculate total assets and liabilities
+    const calculateTotal = (data: TreemapNode[]): number => {
+        return data.reduce((sum, node) => sum + (node.value || 0), 0);
+    };
+
+    const totalAssets = calculateTotal(assetsData);
+    const totalLiabilities = calculateTotal(liabilitiesData);
 
     const getOption = (
         data: TreemapNode[],
@@ -88,11 +93,15 @@ export const DualTreemap: React.FC<DualTreemapProps> = ({
                 name: title,
                 type: 'treemap',
                 visibleMin: 300,
+                top: '5%',
+                bottom: '8%',
+                left: '5%',
+                right: '5%',
                 label: {
                     show: true,
                     formatter: '{b}',
                     fontSize: 12,
-                    color: getChartColors().text,  // Dynamic color
+                    color: getChartColors().text,
                 },
                 itemStyle: {
                     borderWidth: 0,
@@ -101,24 +110,54 @@ export const DualTreemap: React.FC<DualTreemapProps> = ({
                     show: false,
                 },
                 data: data,
-                color: colors,
+                levels: [
+                    {
+                        itemStyle: {
+                            borderWidth: 0,
+                        },
+                    },
+                    {
+                        color: colors,
+                        colorMappingBy: 'index',
+                        itemStyle: {
+                            borderWidth: 0,
+                        },
+                    },
+                ],
                 roam: false,
                 nodeClick: false,
             },
         ],
     });
 
-    // Green palette for Assets
-    const assetColors = ['#10B981', '#34D399', '#6EE7B7', '#A7F3D0'];
+    const assetColors = [
+        '#10B981',
+        '#059669',
+        '#34D399',
+        '#14B8A6',
+        '#0D9488',
+        '#2DD4BF',
+        '#047857',
+        '#6EE7B7',
+    ];
 
-    // Red palette for Liabilities
-    const liabilityColors = ['#EF4444', '#F87171', '#FCA5A5', '#FECACA'];
+    const liabilityColors = [
+        '#EF4444',
+        '#DC2626',
+        '#F87171',
+        '#FB7185',
+        '#E11D48',
+        '#FDA4AF',
+        '#BE123C',
+        '#FCA5A5',
+    ];
 
     return (
         <Container>
             <ChartSection>
                 <ChartTitle>资产结构</ChartTitle>
                 <ChartContainer>
+                    <TotalText>总资产: {formatCurrency(totalAssets)}</TotalText>
                     <ReactECharts
                         option={getOption(assetsData, '资产', assetColors)}
                         style={{ height: '350px' }}
@@ -129,6 +168,7 @@ export const DualTreemap: React.FC<DualTreemapProps> = ({
             <ChartSection>
                 <ChartTitle>负债分布</ChartTitle>
                 <ChartContainer>
+                    <TotalText>总负债: {formatCurrency(totalLiabilities)}</TotalText>
                     <ReactECharts
                         option={getOption(liabilitiesData, '负债', liabilityColors)}
                         style={{ height: '350px' }}

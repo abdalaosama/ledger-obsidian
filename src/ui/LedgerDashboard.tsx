@@ -7,6 +7,8 @@ import { LedgerModifier } from '../file-interface';
 import type { TransactionCache } from '../parser';
 import { ISettings } from '../settings';
 import { ReconcileModal } from '../reconcile-modal';
+import { AdjustBalanceModal } from '../AdjustBalanceModal';
+
 
 import { AccountsList } from './AccountsList';
 import { AccountVisualization } from './AccountVisualization';
@@ -145,6 +147,23 @@ const DesktopDashboard: React.FC<{
                 }}
               >
                 流水核对
+              </button>
+              <button
+                onClick={() => {
+                  new AdjustBalanceModal((props.updater as any).plugin).open();
+                }}
+                style={{
+                  padding: '8px 12px',
+                  background: 'var(--interactive-accent)',
+                  color: 'var(--text-on-accent)',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '13px',
+                  width: '100%',
+                }}
+              >
+                开始对账
               </button>
               <button
                 onClick={() => setShowReport(true)}

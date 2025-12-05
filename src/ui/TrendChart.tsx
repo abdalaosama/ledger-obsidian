@@ -36,10 +36,8 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, currencySymbol }) 
     }, []);
 
     const formatCurrency = (amount: number): string => {
-        return `${currencySymbol}${Math.abs(amount).toLocaleString('zh-CN', {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-        })}`;
+        const truncated = Math.floor(Math.abs(amount) * 100) / 100;
+        return `${currencySymbol}${truncated.toFixed(2)}`;
     };
 
     // X轴：日期（1-31）
