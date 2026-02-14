@@ -78,7 +78,7 @@ export function calculateTrendData(
         const month = window.moment().subtract(i, 'months');
         const kpi = calculateMonthlyKPI(txCache, month);
 
-        months.push(month.format('M月'));
+        months.push(month.format('M'));
         income.push(kpi.income);
         expense.push(kpi.expense);
         netBalance.push(kpi.balance);
@@ -88,7 +88,7 @@ export function calculateTrendData(
 }
 
 /**
- * 计算资产结构数据（用于Treemap）
+ * Calculate asset structure data (for Treemap)
  */
 export interface TreemapNode {
     name: string;
@@ -100,7 +100,7 @@ export interface TreemapNode {
 export function calculateAssetStructure(
     txCache: TransactionCache,
 ): TreemapNode[] {
-    // 计算各账户的当前余额
+    // Calculate current balance for each account
     const accountBalances = new Map<string, number>();
 
     txCache.transactions.forEach((tx) => {
@@ -113,7 +113,7 @@ export function calculateAssetStructure(
         });
     });
 
-    // 按账户类型分组
+    // Group by account type
     const assets: TreemapNode[] = [];
     const liabilities: TreemapNode[] = [];
 
@@ -129,9 +129,9 @@ export function calculateAssetStructure(
             value: Math.abs(balance),
         };
 
-        if (category.includes('Asset') || category.includes('资产')) {
+        if (category.includes('Asset') || category.includes('Assets')) {
             assets.push(node);
-        } else if (category.includes('Liab') || category.includes('负债')) {
+        } else if (category.includes('Liab') || category.includes('Liabilities')) {
             liabilities.push(node);
         }
     });
@@ -140,7 +140,7 @@ export function calculateAssetStructure(
 
     if (assets.length > 0) {
         result.push({
-            name: '资产',
+            name: 'Assets',
             value: assets.reduce((sum, a) => sum + a.value, 0),
             itemStyle: { color: '#3b82f6' },
             children: assets,
@@ -149,7 +149,7 @@ export function calculateAssetStructure(
 
     if (liabilities.length > 0) {
         result.push({
-            name: '负债',
+            name: 'Liabilities',
             value: liabilities.reduce((sum, l) => sum + l.value, 0),
             itemStyle: { color: '#ef4444' },
             children: liabilities,
@@ -160,7 +160,7 @@ export function calculateAssetStructure(
 }
 
 /**
- * 生成Sankey图数据（收入->支出流向）
+ * Generate Sankey diagram data (Income -> Expense flow)
  */
 export interface SankeyData {
     nodes: Array<{ name: string }>;
@@ -179,7 +179,7 @@ export function calculateSankeyData(
         return txDate.isSameOrAfter(startOfMonth) && txDate.isSameOrBefore(endOfMonth);
     });
 
-    // 收集收入和支出流向
+    // Collect income and expense flows
     const incomeBySource = new Map<string, number>();
     const expenseByCategory = new Map<string, number>();
 
@@ -193,16 +193,16 @@ export function calculateSankeyData(
             if (!('account' in line)) return;
 
             const account = line.dealiasedAccount;
-            // 限制到二级账户
+            // Limit to second-level accounts
             const parts = account.split(':');
-            const secondLevel = parts.slice(0, 2).join(':'); // 只取前两级
+            const secondLevel = parts.slice(0, 2).join(':'); // Only first two levels
 
-            if (account.includes('Income') || account.includes('收入')) {
+            if (account.includes('Income') || account.includes('Income')) {
                 hasIncome = true;
                 txIncomeSources.push(secondLevel);
                 const current = incomeBySource.get(secondLevel) || 0;
                 incomeBySource.set(secondLevel, current + Math.abs(line.amount));
-            } else if (account.includes('Expense') || account.includes('支出')) {
+            } else if (account.includes('Expense') || account.includes('Expense')) {
                 hasExpense = true;
                 txExpenseCategories.push(secondLevel);
                 const current = expenseByCategory.get(secondLevel) || 0;
@@ -211,21 +211,21 @@ export function calculateSankeyData(
         });
     });
 
-    // 构建节点和链接
+    // Build nodes and links
     const nodes: Array<{ name: string }> = [];
     const links: Array<{ source: string; target: string; value: number }> = [];
 
-    // 添加收入源节点
+    // Add income source nodes
     incomeBySource.forEach((value, source) => {
         nodes.push({ name: source });
     });
 
-    // 添加支出类别节点
+    // Add expense category nodes
     expenseByCategory.forEach((value, category) => {
         nodes.push({ name: category });
     });
 
-    // 简化：假设收入按比例流向各支出
+    // Simplified: assume income flows to all expenses proportionally
     const totalIncome = Array.from(incomeBySource.values()).reduce((sum, v) => sum + v, 0);
     const totalExpense = Array.from(expenseByCategory.values()).reduce((sum, v) => sum + v, 0);
 
@@ -248,7 +248,7 @@ export function calculateSankeyData(
 }
 
 /**
- * 获取月度交易明细
+ * Get monthly transaction details
  */
 export interface Transaction {
     date: string;
@@ -277,7 +277,7 @@ export function getMonthlyTransactions(
 
     monthTransactions.forEach((tx) => {
         const total = getTotalAsNum(tx);
-        const isIncome = total < 0; // 负值表示收入（资产增加）
+        const isIncome = total < 0; // Negative values indicate income (asset increase)
 
         const mainAccount = tx.value.expenselines.find(line => 'account' in line && line.amount !== 0);
 
@@ -298,13 +298,13 @@ export function getMonthlyTransactions(
 }
 
 /**
- * 计算按日趋势数据（用于当月每日的收支趋势）
+ * Calculate daily trend data (for monthly daily income/expense trends)
  */
 export interface DailyTrendData {
-    dates: string[];       // 日期数组 (1-31)
-    income: number[];      // 每日收入
-    expense: number[];     // 每日支出
-    netBalance: number[];  // 每日净结余
+    dates: string[];       // Date array (1-31)
+    income: number[];      // Daily income
+    expense: number[];     // Daily expense
+    netBalance: number[];  // Daily net balance
 }
 
 export function calculateDailyTrendData(
@@ -315,11 +315,11 @@ export function calculateDailyTrendData(
     const endOfMonth = month.clone().endOf('month');
     const daysInMonth = month.daysInMonth();
 
-    // 初始化每日数据
+    // Initialize daily data
     const dailyIncome = new Map<number, number>();
     const dailyExpense = new Map<number, number>();
 
-    // 累计每日的收入和支出
+    // Accumulate daily income and expense
     txCache.transactions.forEach((tx) => {
         const txDate = window.moment(tx.value.date, ['YYYY-MM-DD', 'YYYY/MM/DD']);
         if (!txDate.isBetween(startOfMonth, endOfMonth, null, '[]')) return;
@@ -332,9 +332,9 @@ export function calculateDailyTrendData(
             if (!('account' in line)) return;
             const account = line.dealiasedAccount;
 
-            if (account.includes('Income') || account.includes('收入')) {
+            if (account.includes('Income') || account.includes('Income')) {
                 dayIncome += Math.abs(line.amount);
-            } else if (account.includes('Expense') || account.includes('支出')) {
+            } else if (account.includes('Expense') || account.includes('Expense')) {
                 dayExpense += Math.abs(line.amount);
             }
         });
@@ -343,7 +343,7 @@ export function calculateDailyTrendData(
         dailyExpense.set(day, (dailyExpense.get(day) || 0) + dayExpense);
     });
 
-    // 构建输出数组（只包含有交易的日期）
+    // Build output array (only include dates with transactions)
     const dates: string[] = [];
     const income: number[] = [];
     const expense: number[] = [];
@@ -355,7 +355,7 @@ export function calculateDailyTrendData(
         const dayInc = dailyIncome.get(day) || 0;
         const dayExp = dailyExpense.get(day) || 0;
 
-        if (dayInc === 0 && dayExp === 0) continue; // 跳过无交易的日期
+        if (dayInc === 0 && dayExp === 0) continue; // Skip dates without transactions
 
         dates.push(day.toString());
         income.push(dayInc);
@@ -368,7 +368,7 @@ export function calculateDailyTrendData(
 }
 
 /**
- * 计算资产+收入结构（用于Treemap）
+ * Calculate assets + income structure (for Treemap)
  */
 export function calculateAssetAndIncomeStructure(
     txCache: TransactionCache,
@@ -384,7 +384,7 @@ export function calculateAssetAndIncomeStructure(
         });
     });
 
-    // 按二级账户聚合（扁平结构，不嵌套）
+    // Aggregate by second-level accounts (flat structure, not nested)
     const secondLevelBalances = new Map<string, number>();
 
     accountBalances.forEach((balance, account) => {
@@ -392,17 +392,17 @@ export function calculateAssetAndIncomeStructure(
         const parts = account.split(':');
         const category = parts[0];
 
-        // 只包含资产和收入
+        // Only include assets and income
         if (category.includes('Asset') || category.includes('资产') ||
             category.includes('Income') || category.includes('收入')) {
-            // 取二级账户名称（例如："资产:银行" 取 "银行"）
+            // Get second-level account name (e.g., "Assets:Bank" get "Bank")
             const secondLevelName = parts[1] || parts[0];
             const current = secondLevelBalances.get(secondLevelName) || 0;
             secondLevelBalances.set(secondLevelName, current + balance);
         }
     });
 
-    // 构建扁平Treemap数据（不嵌套，每个都是顶级节点）
+    // Build flat Treemap data (not nested, each is top-level node)
     const result: TreemapNode[] = [];
     secondLevelBalances.forEach((balance, name) => {
         if (balance === 0) return;
@@ -417,7 +417,7 @@ export function calculateAssetAndIncomeStructure(
 }
 
 /**
- * 计算负债结构（用于Treemap）
+ * Calculate liabilities structure (for Treemap)
  */
 export function calculateLiabilitiesStructure(
     txCache: TransactionCache,
@@ -433,7 +433,7 @@ export function calculateLiabilitiesStructure(
         });
     });
 
-    // 按二级账户聚合（扁平结构）
+    // Aggregate by second-level accounts (flat structure)
     const secondLevelBalances = new Map<string, number>();
 
     accountBalances.forEach((balance, account) => {
@@ -441,16 +441,16 @@ export function calculateLiabilitiesStructure(
         const parts = account.split(':');
         const category = parts[0];
 
-        // 只包含负债
+        // Only include liabilities
         if (category.includes('Liab') || category.includes('负债')) {
-            // 取二级账户名称
+            // Get second-level account name
             const secondLevelName = parts[1] || parts[0];
             const current = secondLevelBalances.get(secondLevelName) || 0;
             secondLevelBalances.set(secondLevelName, current + Math.abs(balance));
         }
     });
 
-    // 构建扁平Treemap数据
+    // Build flat Treemap data
     const result: TreemapNode[] = [];
     secondLevelBalances.forEach((balance, name) => {
         if (balance === 0) return;
@@ -465,14 +465,14 @@ export function calculateLiabilitiesStructure(
 }
 
 /**
- * 获取带来源/目标账户的交易明细
+ * Get transaction details with source/target accounts
  */
 export interface TransactionRow {
-    date: string;          // 日期
-    payee: string;         // 收款人
-    amount: number;        // 金额
-    sourceAccount: string; // 来源账户
-    targetAccount: string; // 目标账户
+    date: string;          // Date
+    payee: string;         // Payee
+    amount: number;        // Amount
+    sourceAccount: string; // Source account
+    targetAccount: string; // Target account
 }
 
 export function getTransactionsWithAccounts(
@@ -490,7 +490,7 @@ export function getTransactionsWithAccounts(
     const transactions: TransactionRow[] = [];
 
     monthTransactions.forEach((tx) => {
-        // 找出正负金额的账户
+        // Find accounts with positive/negative amounts
         const positiveLines = tx.value.expenselines.filter(line => 'account' in line && line.amount > 0);
         const negativeLines = tx.value.expenselines.filter(line => 'account' in line && line.amount < 0);
 
@@ -518,7 +518,7 @@ export function getTransactionsWithAccounts(
 }
 
 /**
- * 构建层级树形结构
+ * Build hierarchical tree structure
  */
 export function buildHierarchy(balances: Map<string, number>): TreemapNode[] {
     const root: TreemapNode[] = [];
@@ -574,8 +574,8 @@ export function buildHierarchy(balances: Map<string, number>): TreemapNode[] {
 }
 
 /**
- * 计算双矩形树图数据 (Assets & Liabilities)
- * 截止到指定月份月末（或当前日期）
+ * Calculate dual treemap data (Assets & Liabilities)
+ * Up to the end of specified month (or current date)
  */
 export function calculateDualTreemapData(
     txCache: TransactionCache,

@@ -74,7 +74,7 @@ export const FinancialReport: React.FC<FinancialReportProps> = ({
     [selectedMonth, hasDataForMonth],
   );
 
-  // 使用数据服务计算各项数据
+  // Use data service to calculate various metrics
   const kpiData = React.useMemo(
     () => dataService.calculateKPIs(selectedMonth),
     [dataService, selectedMonth],
@@ -95,7 +95,7 @@ export const FinancialReport: React.FC<FinancialReportProps> = ({
     [dataService, selectedMonth],
   );
 
-  // 交易明细
+  // Transaction details
   const transactions = React.useMemo(
     () => getTransactionsWithAccounts(txCache, selectedMonth),
     [txCache, selectedMonth],

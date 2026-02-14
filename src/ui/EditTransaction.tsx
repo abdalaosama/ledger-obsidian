@@ -396,7 +396,7 @@ export const EditTransaction: React.FC<{
             errors.total = 'Total amount must be a number';
           }
           if (values.txType !== 'transfer' && values.payee === '') {
-            errors.payee = '必填';
+            errors.payee = 'Required field';
           }
 
           if (values.lines.some((line) => line.account === '')) {
@@ -486,9 +486,9 @@ export const EditTransaction: React.FC<{
                     name="txType"
                     component={ButtonGroup}
                     options={[
-                      ['expense', '支出'],
-                      ['income', '收入'],
-                      ['transfer', '转账'],
+                      ['expense', 'Expense'],
+                      ['income', 'Income'],
+                      ['transfer', 'Transfer'],
                     ]}
                   />
                 </Margin>
