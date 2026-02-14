@@ -3,13 +3,13 @@ import { filterByEndDate, filterByStartDate, getTotalAsNum } from './transaction
 import { Moment } from 'moment';
 
 /**
- * 计算指定月份的财务KPI指标
+ * Calculate monthly financial KPI metrics
  */
 export interface MonthlyKPI {
-    balance: number;      // 本月结余
-    income: number;       // 本月收入
-    expense: number;      // 本月支出
-    savingsRate: number;  // 储蓄率 (0-1)
+    balance: number;      // Monthly balance
+    income: number;       // Monthly income
+    expense: number;      // Monthly expense
+    savingsRate: number;  // Savings rate (0-1)
 }
 
 export function calculateMonthlyKPI(
@@ -33,12 +33,12 @@ export function calculateMonthlyKPI(
 
             const account = line.dealiasedAccount;
 
-            // 收入账户
-            if (account.includes('Income') || account.includes('收入')) {
+            // Income accounts
+            if (account.includes('Income') || account.includes('Income')) {
                 income += Math.abs(line.amount);
             }
-            // 支出账户
-            else if (account.includes('Expense') || account.includes('支出')) {
+            // Expense accounts
+            else if (account.includes('Expense') || account.includes('Expense')) {
                 expense += Math.abs(line.amount);
             }
         });
@@ -56,7 +56,7 @@ export function calculateMonthlyKPI(
 }
 
 /**
- * 计算多个月份的趋势数据
+ * Calculate trend data for multiple months
  */
 export interface TrendData {
     months: string[];

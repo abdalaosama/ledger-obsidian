@@ -33,7 +33,7 @@ export const makeNetWorthData = (
       x: bucket,
       y: netWorth,
       meta: {
-        account: '净资产',
+        account: 'Net Worth',
         date: bucket,
       },
     };

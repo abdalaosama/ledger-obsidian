@@ -13,11 +13,11 @@ export class SettingsTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    containerEl.createEl('h2', { text: 'Ledger 插件 - 设置' });
+    containerEl.createEl('h2', { text: 'Ledger Plugin - Settings' });
 
     new Setting(containerEl)
-      .setName('货币符号')
-      .setDesc('所有交易金额的前缀')
+      .setName('Currency Symbol')
+      .setDesc('Prefix for all transaction amounts')
       .addText((text) => {
         text.setPlaceholder('$').setValue(this.plugin.settings.currencySymbol);
         text.inputEl.onblur = (e: FocusEvent) => {
@@ -29,8 +29,8 @@ export class SettingsTab extends PluginSettingTab {
       });
 
     new Setting(containerEl)
-      .setName('面板标题')
-      .setDesc('Ledger 面板顶部显示的标题')
+      .setName('Dashboard Title')
+      .setDesc('Title displayed at the top of the Ledger dashboard')
       .addText((text) => {
         text.setValue(this.plugin.settings.dashboardTitle);
         text.inputEl.onblur = async (e: FocusEvent) => {
@@ -40,11 +40,11 @@ export class SettingsTab extends PluginSettingTab {
         };
       });
 
-    containerEl.createEl('h3', '图表设置');
+    containerEl.createEl('h3', 'Chart Settings');
 
     new Setting(containerEl)
-      .setName('自适应Y轴')
-      .setDesc('自动调整Y轴范围以放大显示小变化，更易观察趋势')
+      .setName('Adaptive Y-axis')
+      .setDesc('Automatically adjust Y-axis range to magnify small changes for easier trend observation')
       .addToggle((toggle) => {
         toggle.setValue(this.plugin.settings.chartAdaptiveYAxis);
         toggle.onChange(async (value) => {
@@ -54,12 +54,12 @@ export class SettingsTab extends PluginSettingTab {
       });
 
     new Setting(containerEl)
-      .setName('默认图表模式')
-      .setDesc('选择账户页面默认显示的图表类型')
+      .setName('Default Chart Mode')
+      .setDesc('Select the default chart type displayed on the account page')
       .addDropdown((dropdown) => {
         dropdown
-          .addOption('balance', '账户余额')
-          .addOption('pnl', '盈亏')
+          .addOption('balance', 'Account Balance')
+          .addOption('pnl', 'Profit & Loss')
           .setValue(this.plugin.settings.defaultChartMode)
           .onChange(async (value) => {
             this.plugin.settings.defaultChartMode = value as 'balance' | 'pnl';
@@ -68,9 +68,9 @@ export class SettingsTab extends PluginSettingTab {
       });
 
     new Setting(containerEl)
-      .setName('Ledger 文件')
+      .setName('Ledger document')
       .setDesc(
-        'Ledger 文件在仓库中的路径。注意：如果您使用 Obsidian Sync，必须启用“同步所有其他类型”。',
+        'The path to the Ledger file in the repository. Note: If you are using Obsidian Sync, you must enable "Sync all other types".',
       )
       .addText((text) => {
         text
@@ -85,17 +85,17 @@ export class SettingsTab extends PluginSettingTab {
             this.plugin.settings.ledgerFile = newValue;
             this.plugin.saveData(this.plugin.settings);
           } else {
-            target.setCustomValidity('文件必须以 .ledger 结尾');
+            target.setCustomValidity('File must end with .ledger');
           }
           target.reportValidity();
         };
       });
 
-    containerEl.createEl('h3', '交易账户前缀');
+    containerEl.createEl('h3', 'Transaction Account Prefixes');
 
     new Setting(containerEl)
-      .setName('资产账户')
-      .setDesc('资产账户的前缀')
+      .setName('Asset Accounts')
+      .setDesc('Prefix for asset accounts')
       .addText((text) => {
         text.setValue(this.plugin.settings.assetAccountsPrefix);
         text.inputEl.onblur = (e: FocusEvent) => {
@@ -107,8 +107,8 @@ export class SettingsTab extends PluginSettingTab {
       });
 
     new Setting(containerEl)
-      .setName('支出账户')
-      .setDesc('支出账户的前缀')
+      .setName('Expense Accounts')
+      .setDesc('Prefix for expense accounts')
       .addText((text) => {
         text.setValue(this.plugin.settings.expenseAccountsPrefix);
         text.inputEl.onblur = (e: FocusEvent) => {
@@ -120,8 +120,8 @@ export class SettingsTab extends PluginSettingTab {
       });
 
     new Setting(containerEl)
-      .setName('收入账户')
-      .setDesc('收入账户的前缀')
+      .setName('Income Accounts')
+      .setDesc('Prefix for income accounts')
       .addText((text) => {
         text.setValue(this.plugin.settings.incomeAccountsPrefix);
         text.inputEl.onblur = (e: FocusEvent) => {
@@ -133,8 +133,8 @@ export class SettingsTab extends PluginSettingTab {
       });
 
     new Setting(containerEl)
-      .setName('负债账户')
-      .setDesc('负债账户的前缀')
+      .setName('Liability Accounts')
+      .setDesc('Prefix for liability accounts')
       .addText((text) => {
         text.setValue(this.plugin.settings.liabilityAccountsPrefix);
         text.inputEl.onblur = (e: FocusEvent) => {

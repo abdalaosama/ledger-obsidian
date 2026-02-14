@@ -43,13 +43,13 @@ export const FinancialReport: React.FC<FinancialReportProps> = ({
 }) => {
   const [selectedMonth, setSelectedMonth] = React.useState(window.moment());
 
-  // 创建数据服务
+  // Create data service
   const dataService = React.useMemo(
     () => new DashboardDataService(txCache, settings),
     [txCache, settings],
   );
 
-  // 检查某月是否有数据
+  // Check if month has data
   const hasDataForMonth = React.useCallback(
     (month: ReturnType<typeof window.moment>) => {
       const start = month.clone().startOf('month');

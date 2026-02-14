@@ -84,7 +84,7 @@ export const DualTreemap: React.FC<DualTreemapProps> = ({
 
                 return [
                     `<div class="tooltip-title">${treePath.join(' > ')}</div>`,
-                    `金额: ${formatCurrency(value)}`,
+                    `Amount: ${formatCurrency(value)}`,
                 ].join('');
             },
         },
@@ -155,22 +155,22 @@ export const DualTreemap: React.FC<DualTreemapProps> = ({
     return (
         <Container>
             <ChartSection>
-                <ChartTitle>资产结构</ChartTitle>
+                <ChartTitle>Asset Composition</ChartTitle>
                 <ChartContainer>
-                    <TotalText>总资产: {formatCurrency(totalAssets)}</TotalText>
+                    <TotalText>Total Assets: {formatCurrency(totalAssets)}</TotalText>
                     <ReactECharts
-                        option={getOption(assetsData, '资产', assetColors)}
+                        option={getOption(assetsData, 'Assets', assetColors)}
                         style={{ height: '350px' }}
                         opts={{ renderer: 'svg' }}
                     />
                 </ChartContainer>
             </ChartSection>
             <ChartSection>
-                <ChartTitle>负债分布</ChartTitle>
+                <ChartTitle>Liability Distribution</ChartTitle>
                 <ChartContainer>
-                    <TotalText>总负债: {formatCurrency(totalLiabilities)}</TotalText>
+                    <TotalText>Total Liabilities: {formatCurrency(totalLiabilities)}</TotalText>
                     <ReactECharts
-                        option={getOption(liabilitiesData, '负债', liabilityColors)}
+                        option={getOption(liabilitiesData, 'Liabilities', liabilityColors)}
                         style={{ height: '350px' }}
                         opts={{ renderer: 'svg' }}
                     />

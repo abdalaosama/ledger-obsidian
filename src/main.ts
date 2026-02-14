@@ -49,7 +49,7 @@ export default class LedgerPlugin extends Plugin {
     this.addSettingTab(new SettingsTab(this));
 
     addIcon('ledger', billIcon);
-    this.addRibbonIcon('ledger', '记一笔', async () => {
+    this.addRibbonIcon('ledger', 'Log Transaction', async () => {
       const ledgerFile = await this.createLedgerFileIfMissing();
       new LedgerModifier(this, ledgerFile).openExpenseModal('new');
     });
@@ -78,7 +78,7 @@ export default class LedgerPlugin extends Plugin {
               menu
                 .addItem((item) => {
                   item
-                    .setTitle('作为 Ledger 文件打开')
+                    .setTitle('Open as Ledger File')
                     .setIcon('ledger')
                     .onClick(() => {
                       const state = this.leaf.view.getState();
@@ -99,7 +99,7 @@ export default class LedgerPlugin extends Plugin {
 
     this.addCommand({
       id: 'ledger-add-transaction',
-      name: '记一笔',
+      name: 'Log Transaction',
       icon: 'ledger',
       callback: async () => {
         const ledgerFile = await this.createLedgerFileIfMissing();
@@ -109,14 +109,14 @@ export default class LedgerPlugin extends Plugin {
 
     this.addCommand({
       id: 'ledger-open-dashboard',
-      name: '打开 Ledger 面板',
+      name: 'Open Ledger Dashboard',
       icon: 'ledger',
       callback: this.openLedgerDashboard,
     });
 
     this.addCommand({
       id: 'ledger-reconcile',
-      name: '流水核对',
+      name: 'Statement Reconciliation',
       icon: 'check-circle',
       callback: () => {
         new ReconcileModal(this).open();
@@ -125,7 +125,7 @@ export default class LedgerPlugin extends Plugin {
 
     this.addCommand({
       id: 'ledger-adjust-balance',
-      name: '开始对账',
+      name: 'Start Reconciliation',
       icon: 'calculator',
       callback: () => {
         new AdjustBalanceModal(this).open();

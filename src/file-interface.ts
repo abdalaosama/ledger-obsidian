@@ -69,7 +69,7 @@ export const getTransactionCache = async (
   const file = cache.getFirstLinkpathDest(ledgerFilePath, '');
 
   if (!file) {
-    // 尝试直接使用vault.getAbstractFileByPath
+    // Try to use vault.getAbstractFileByPath directly
     const directFile = vault.getAbstractFileByPath(ledgerFilePath);
 
     if (directFile && directFile instanceof TFile) {

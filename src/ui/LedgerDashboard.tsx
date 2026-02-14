@@ -146,7 +146,7 @@ const DesktopDashboard: React.FC<{
                   width: '100%',
                 }}
               >
-                流水核对
+                Statement Reconciliation
               </button>
               <button
                 onClick={() => {
@@ -163,7 +163,7 @@ const DesktopDashboard: React.FC<{
                   width: '100%',
                 }}
               >
-                开始对账
+                Start Reconciliation
               </button>
               <button
                 onClick={() => setShowReport(true)}
@@ -178,7 +178,7 @@ const DesktopDashboard: React.FC<{
                   width: '100%',
                 }}
               >
-                财务报表
+                Financial Report
               </button>
             </div>
           </AccountsList>

@@ -86,18 +86,18 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
 
     return (
         <div>
-            <TableTitle>交易明细</TableTitle>
+            <TableTitle>Transaction Details</TableTitle>
             <TableContainer>
                 <Table>
                     <Thead>
                         <Tr>
-                            <Th>日期</Th>
-                            <Th>项目</Th>
-                            <Th style={{ textAlign: 'right' }}>收入</Th>
-                            <Th style={{ textAlign: 'right' }}>支出</Th>
-                            <Th style={{ textAlign: 'right' }}>余额</Th>
-                            <Th>账户</Th>
-                            <Th>备注</Th>
+                            <Th>Date</Th>
+                            <Th>Project</Th>
+                            <Th style={{ textAlign: 'right' }}>Income</Th>
+                            <Th style={{ textAlign: 'right' }}>Expense</Th>
+                            <Th style={{ textAlign: 'right' }}>Balance</Th>
+                            <Th>Account</Th>
+                            <Th>Notes</Th>
                         </Tr>
                     </Thead>
                     <Tbody>

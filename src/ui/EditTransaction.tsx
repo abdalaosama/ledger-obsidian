@@ -95,7 +95,7 @@ const calcPlaceholderExpenseLineAmount = (
   );
   if (numEmptyLines === 0 && unassignedTotal !== 0) {
     return err(
-      '所有支出行已分配，但金额总计不为 0',
+      'All expense lines are allocated, but the total amount is not 0',
     );
   }
   return ok((unassignedTotal / numEmptyLines).toFixed(2));
@@ -160,11 +160,11 @@ const ExpenseLine: React.FC<{
     const lastI = lines.length - 1;
     switch (formik.values.txType) {
       case 'expense':
-        return i !== lastI ? '支出' : '资产';
+        return i !== lastI ? 'Expense' : 'Asset';
       case 'income':
-        return i !== lastI ? '资产' : '支出';
+        return i !== lastI ? 'Asset' : 'Expense';
       case 'transfer':
-        return i !== lastI ? '转入' : '转出';
+        return i !== lastI ? 'Transfer In' : 'Transfer Out';
     }
     return '';
   };
@@ -204,7 +204,7 @@ const ExpenseLine: React.FC<{
           className="flexGrow"
           component={TextSuggest}
           name={`lines.${i}.account`}
-          placeholder={getAccountName() + ' 账户'}
+          placeholder={getAccountName() + ' Account'}
           suggestions={getSuggestions()}
         />
         {i + 1 !== lines.length ? (
@@ -213,7 +213,7 @@ const ExpenseLine: React.FC<{
             component={CurrencyInputFormik}
             placeholder={calcPlaceholderExpenseLineAmount(
               formik.values,
-            ).unwrapOr('错误')}
+            ).unwrapOr('Error')}
             currencySymbol={props.currencySymbol}
             name={`lines.${i}.amount`}
           />
@@ -247,7 +247,7 @@ const ExpenseLine: React.FC<{
           className="flexGrow"
           type="text"
           name={`lines.${i}.comment`}
-          placeholder="备注"
+          placeholder="Notes"
         />
       </div>
     </ExpenseLineStyle>
@@ -373,11 +373,11 @@ export const EditTransaction: React.FC<{
 
   return (
     <FormStyles>
-      <h2>记一笔</h2>
+      <h2>Log Transaction</h2>
 
       {props.displayFileWarning ? (
         <Warning>
-          请将您的 Ledger 文件重命名为以 .ledger 结尾。重命名后，请在 Ledger 插件设置中更新配置选项。
+          Please rename your Ledger file to end with .ledger. After renaming, please update the configuration options in the Ledger plugin settings.
         </Warning>
       ) : null}
 
@@ -388,19 +388,19 @@ export const EditTransaction: React.FC<{
           const errors: ValueErrors = {};
 
           if (values.date === '') {
-            errors.date = '必填';
+            errors.date = 'Required';
           }
           if (values.total === '') {
-            errors.total = '必填';
+            errors.total = 'Required';
           } else if (Number.isNaN(parseFloat(values.total))) {
-            errors.total = '总金额必须是数字';
+            errors.total = 'Total amount must be a number';
           }
           if (values.txType !== 'transfer' && values.payee === '') {
             errors.payee = '必填';
           }
 
           if (values.lines.some((line) => line.account === '')) {
-            errors.lines = '所有行必须指定账户';
+            errors.lines = 'All lines must specify an account';
           }
 
           if (values.lines.filter((line) => line.amount === '').length === 0) {
@@ -410,9 +410,9 @@ export const EditTransaction: React.FC<{
               0,
             );
             if (sum !== 0) {
-              errors.lines = `金额总计 $${sum.toFixed(
+              errors.lines = `Amount total $${sum.toFixed(
                 2,
-              )} 但必须为 $0`;
+              )} but must be $0`;
             }
           }
 
@@ -498,11 +498,11 @@ export const EditTransaction: React.FC<{
                       component={CurrencyInputFormik}
                       currencySymbol={props.currencySymbol}
                       name="total"
-                      placeholder="总金额"
+                      placeholder="Total Amount"
                     />
                     <ErrorMessage name="total" component="div" />
                   </Margin>
-                  <Margin className="flexShrink">于</Margin>
+                  <Margin className="flexShrink">on</Margin>
                   <Margin className="flexGrow">
                     <Field type="date" name="date" />
                     <ErrorMessage name="date" component="div" />
@@ -513,7 +513,7 @@ export const EditTransaction: React.FC<{
                     <Field
                       component={TextSuggest}
                       name="payee"
-                      placeholder="收款人 (例如: Obsidian.md)"
+                      placeholder="Payee (e.g. Obsidian.md)"
                       suggestions={props.txCache.payees}
                     />
                     <ErrorMessage name="payee" component="div" />
@@ -606,7 +606,7 @@ export const EditTransaction: React.FC<{
                     Back
                   </button>
                   <button type="submit" disabled={formik.isSubmitting}>
-                    提交
+                    Submit
                   </button>
                 </>
               )}

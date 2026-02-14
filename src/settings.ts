@@ -6,7 +6,7 @@ const defaultSettings: ISettings = {
   expenseAccountsPrefix: 'Expenses',
   incomeAccountsPrefix: 'Income',
   liabilityAccountsPrefix: 'Liabilities',
-  dashboardTitle: 'Ledger 账本',
+  dashboardTitle: 'Ledger Dashboard',
   chartAdaptiveYAxis: true,
   defaultChartMode: 'balance',
 };

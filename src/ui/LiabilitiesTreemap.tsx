@@ -121,7 +121,7 @@ export const LiabilitiesTreemap: React.FC<LiabilitiesTreemapProps> = ({ data, cu
 
     return (
         <div>
-            <ChartTitle>负债情况</ChartTitle>
+            <ChartTitle>Liabilities</ChartTitle>
             <ChartContainer>
                 <ReactECharts
                     option={treemapOption}

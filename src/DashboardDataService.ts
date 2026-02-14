@@ -99,9 +99,9 @@ export class DashboardDataService {
 
                 const account = line.dealiasedAccount;
 
-                if (account.includes('Income') || account.includes('收入')) {
+                if (account.includes('Income')) {
                     totalIncome += Math.abs(line.amount);
-                } else if (account.includes('Expense') || account.includes('支出')) {
+                } else if (account.includes('Expense')) {
                     totalExpense += line.amount;
                 }
             });
@@ -150,13 +150,13 @@ export class DashboardDataService {
                 const parts = account.split(':');
                 const category = parts.length > 1 ? parts[1] : parts[0];
 
-                if (account.includes('Income') || account.includes('收入')) {
+                if (account.includes('Income')) {
                     const current = incomeCategories.get(category) || 0;
                     incomeCategories.set(category, current + Math.abs(line.amount));
-                } else if (account.includes('Expense') || account.includes('支出')) {
+                } else if (account.includes('Expense')) {
                     const current = expenseCategories.get(category) || 0;
                     expenseCategories.set(category, current + line.amount);
-                } else if ((account.includes('Liabilities') || account.includes('负债')) && line.amount > 0) {
+                } else if (account.includes('Liabilities') && line.amount > 0) {
                     // Identify debt repayment: Liabilities account with positive amount (debt decrease)
                     const current = repaymentCategories.get(category) || 0;
                     repaymentCategories.set(category, current + line.amount);
@@ -174,17 +174,17 @@ export class DashboardDataService {
 
         // Add debt repayment to target nodes (right side)
         if (totalRepayment > 0) {
-            expenseCategories.set('债务偿还', totalRepayment);
+            expenseCategories.set('Debt Repayment', totalRepayment);
         }
 
         if (delta >= 0) {
             // Surplus: add "Savings" node to the right (target)
             if (delta > 0) {
-                expenseCategories.set('结余', delta);
+                expenseCategories.set('Balance', delta);
             }
         } else {
             // Deficit: add "Supplement" node to the left (source)
-            incomeCategories.set('存量消耗', Math.abs(delta));
+            incomeCategories.set('Reserve Depletion', Math.abs(delta));
         }
 
         // Step 3: Build nodes with values for sorting
@@ -349,9 +349,9 @@ export class DashboardDataService {
 
             if (dayData) {
                 dayData.forEach((amount, account) => {
-                    if (account.includes('Income') || account.includes('收入')) {
+                    if (account.includes('Income')) {
                         dayIncome += Math.abs(amount);
-                    } else if (account.includes('Expense') || account.includes('支出')) {
+                    } else if (account.includes('Expense')) {
                         dayExpense += amount;
                     }
                 });

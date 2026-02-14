@@ -20,22 +20,22 @@ export class ReconcileModal extends Modal {
     }
 
     public onOpen = async (): Promise<void> => {
-        // 检查txCache是否已加载
+        // Check if txCache is loaded
         if (!this.plugin.txCache || !this.plugin.txCache.transactions) {
-            new Notice('账本数据未加载，正在重新加载...');
+            new Notice('Ledger data not loaded, reloading...');
             try {
-                // 尝试重新加载
+                // Try to reload
                 await (this.plugin as any).updateTransactionCache();
 
-                // 再次检查
+                // Check again
                 if (!this.plugin.txCache || !this.plugin.txCache.transactions) {
-                    new Notice('无法加载账本数据，请检查账本文件路径设置');
+                    new Notice('Unable to load ledger data, please check the ledger file path settings');
                     this.close();
                     return;
                 }
             } catch (error) {
-                console.error('加载账本失败:', error);
-                new Notice('加载账本失败，请检查控制台');
+                console.error('Failed to load ledger:', error);
+                new Notice('Failed to load ledger, please check the console');
                 this.close();
                 return;
             }
@@ -81,7 +81,7 @@ export class ReconcileModal extends Modal {
             );
 
             if (!abstractFile || !(abstractFile instanceof TFile)) {
-                new Notice('账本文件未找到');
+                new Notice('Ledger file not found');
                 return;
             }
 
@@ -122,13 +122,13 @@ export class ReconcileModal extends Modal {
 
             // Show success message
             new Notice(
-                `流水核对完成，共 ${selectedTxs.length} 笔交易`,
+                `Statement reconciliation completed, total ${selectedTxs.length} transactions`,
             );
 
             this.close();
         } catch (error) {
             console.error('Reconciliation failed:', error);
-            new Notice('流水核对失败，请查看控制台');
+            new Notice('Statement reconciliation failed, please check the console');
         }
     };
 

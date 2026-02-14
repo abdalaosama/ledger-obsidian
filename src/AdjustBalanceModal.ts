@@ -28,11 +28,11 @@ export class AdjustBalanceModal extends Modal {
         contentEl.addClass('adjust-balance-modal');
 
         // Title
-        contentEl.createEl('h2', { text: '开始对账 (修正余额)' });
+        contentEl.createEl('h2', { text: 'Start Reconciliation (Adjust Balance)' });
 
         // Check if txCache is loaded
         if (!this.plugin.txCache || !this.plugin.txCache.transactions) {
-            contentEl.createEl('p', { text: '账本数据未加载，请检查账本文件路径设置' });
+            contentEl.createEl('p', { text: 'Ledger data not loaded, please check the ledger file path settings' });
             return;
         }
 
@@ -43,17 +43,17 @@ export class AdjustBalanceModal extends Modal {
         );
 
         if (assetsAndLiabilities.length === 0) {
-            contentEl.createEl('p', { text: '未找到资产或负债账户' });
+            contentEl.createEl('p', { text: 'No assets or liabilities accounts found' });
             return;
         }
 
         // Account selection
         const accountContainer = contentEl.createDiv({ cls: 'adjust-balance-field' });
-        accountContainer.createEl('label', { text: '选择账户:' });
+        accountContainer.createEl('label', { text: 'Select Account:' });
         this.accountDropdown = new DropdownComponent(accountContainer);
 
         // Add placeholder option
-        this.accountDropdown.addOption('', '-- 请选择账户 --');
+        this.accountDropdown.addOption('', '-- Please Select Account --');
 
         // Add accounts to dropdown
         assetsAndLiabilities.forEach((account) => {
@@ -68,15 +68,15 @@ export class AdjustBalanceModal extends Modal {
 
         // Book balance display
         const bookBalanceContainer = contentEl.createDiv({ cls: 'adjust-balance-field' });
-        bookBalanceContainer.createEl('label', { text: '账面余额:' });
+        bookBalanceContainer.createEl('label', { text: 'Book Balance:' });
         this.bookBalanceEl = bookBalanceContainer.createDiv({ cls: 'adjust-balance-readonly' });
-        this.bookBalanceEl.setText('请先选择账户');
+        this.bookBalanceEl.setText('Please select an account first');
 
         // Actual balance input
         const actualBalanceContainer = contentEl.createDiv({ cls: 'adjust-balance-field' });
-        actualBalanceContainer.createEl('label', { text: '实际余额:' });
+        actualBalanceContainer.createEl('label', { text: 'Actual Balance:' });
         this.actualBalanceInput = new TextComponent(actualBalanceContainer);
-        this.actualBalanceInput.setPlaceholder('输入实际余额 (例如: 1000.00)');
+        this.actualBalanceInput.setPlaceholder('Enter actual balance (e.g.: 1000.00)');
         this.actualBalanceInput.onChange((value) => {
             const parsed = parseFloat(value);
             this.actualBalance = isNaN(parsed) ? 0 : parsed;
@@ -85,7 +85,7 @@ export class AdjustBalanceModal extends Modal {
 
         // Difference preview
         const differenceContainer = contentEl.createDiv({ cls: 'adjust-balance-field' });
-        differenceContainer.createEl('label', { text: '差额预览:' });
+        differenceContainer.createEl('label', { text: 'Difference Preview:' });
         this.differenceEl = differenceContainer.createDiv({ cls: 'adjust-balance-difference' });
         this.differenceEl.setText('--');
 
@@ -93,12 +93,12 @@ export class AdjustBalanceModal extends Modal {
         const buttonContainer = contentEl.createDiv({ cls: 'adjust-balance-buttons' });
 
         const confirmButton = buttonContainer.createEl('button', {
-            text: '确认写入',
+            text: 'Confirm',
             cls: 'mod-cta'
         });
         confirmButton.addEventListener('click', () => this.handleSubmit());
 
-        const cancelButton = buttonContainer.createEl('button', { text: '取消' });
+        const cancelButton = buttonContainer.createEl('button', { text: 'Cancel' });
         cancelButton.addEventListener('click', () => this.close());
 
         // Add some styles
@@ -110,7 +110,7 @@ export class AdjustBalanceModal extends Modal {
      */
     private updateBookBalance = (): void => {
         if (!this.selectedAccount) {
-            this.bookBalanceEl.setText('请先选择账户');
+            this.bookBalanceEl.setText('Please select an account first');
             return;
         }
 
@@ -130,7 +130,7 @@ export class AdjustBalanceModal extends Modal {
             const accountBalances = balanceMap.get(today);
 
             if (!accountBalances) {
-                this.bookBalanceEl.setText(`账面: ${this.plugin.settings.currencySymbol}0.00`);
+                this.bookBalanceEl.setText(`Book: ${this.plugin.settings.currencySymbol}0.00`);
                 return;
             }
 
@@ -143,10 +143,10 @@ export class AdjustBalanceModal extends Modal {
             );
 
             this.bookBalanceEl.setText(
-                `账面: ${this.plugin.settings.currencySymbol}${balance.toFixed(2)}`
+                `Book: ${this.plugin.settings.currencySymbol}${balance.toFixed(2)}`
             );
         } catch (error) {
-            this.bookBalanceEl.setText('计算余额时出错');
+            this.bookBalanceEl.setText('Error calculating balance');
         }
     };
 
@@ -185,7 +185,7 @@ export class AdjustBalanceModal extends Modal {
             const sign = diff >= 0 ? '+' : '';
 
             this.differenceEl.setText(
-                `需修正: ${sign}${this.plugin.settings.currencySymbol}${diff.toFixed(2)}`
+                `To Adjust: ${sign}${this.plugin.settings.currencySymbol}${diff.toFixed(2)}`
             );
 
             // Color code the difference
@@ -197,7 +197,7 @@ export class AdjustBalanceModal extends Modal {
                 this.differenceEl.style.color = 'var(--text-muted)';
             }
         } catch (error) {
-            this.differenceEl.setText('计算差额时出错');
+            this.differenceEl.setText('Error calculating difference');
         }
     };
 
@@ -206,12 +206,12 @@ export class AdjustBalanceModal extends Modal {
      */
     private handleSubmit = async (): Promise<void> => {
         if (!this.selectedAccount) {
-            new Notice('请选择一个账户');
+            new Notice('Please select an account');
             return;
         }
 
         if (!this.actualBalanceInput.getValue()) {
-            new Notice('请输入实际余额');
+            new Notice('Please enter actual balance');
             return;
         }
 
@@ -241,7 +241,7 @@ export class AdjustBalanceModal extends Modal {
             const diff = this.actualBalance - bookBalance;
 
             if (diff === 0) {
-                new Notice('账面与实际余额一致，无需修正');
+                new Notice('Book balance matches actual balance, no adjustment needed');
                 this.close();
                 return;
             }
@@ -252,9 +252,9 @@ export class AdjustBalanceModal extends Modal {
                 ? `${this.plugin.settings.currencySymbol}${diff.toFixed(2)}`
                 : `-${this.plugin.settings.currencySymbol}${Math.abs(diff).toFixed(2)}`;
 
-            const ledgerText = `\n${dateStr} * 余额修正
+            const ledgerText = `\n${dateStr} * Balance Adjustment
     ${this.selectedAccount}      ${diffStr}
-    权益:余额调整
+    Equity:Balance Adjustment
 `;
 
             // Get the ledger file
@@ -263,7 +263,7 @@ export class AdjustBalanceModal extends Modal {
             );
 
             if (!abstractFile || !(abstractFile instanceof TFile)) {
-                new Notice('账本文件未找到');
+                new Notice('Ledger file not found');
                 return;
             }
 
@@ -277,10 +277,10 @@ export class AdjustBalanceModal extends Modal {
             // Refresh the transaction cache
             await (this.plugin as any).updateTransactionCache();
 
-            new Notice('余额已修正！');
+            new Notice('Balance adjusted successfully!');
             this.close();
         } catch (error) {
-            new Notice('修正余额失败');
+            new Notice('Balance adjustment failed');
         }
     };
 

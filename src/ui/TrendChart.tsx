@@ -40,7 +40,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, currencySymbol }) 
         return `${currencySymbol}${truncated.toFixed(2)}`;
     };
 
-    // X轴：日期（1-31）
+    // X-axis: dates (1-31)
     const trendDates = data.dailyIncome.map((item) =>
         window.moment(item.date).format('D'),
     );
@@ -66,7 +66,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, currencySymbol }) 
                 },
             },
             formatter: (params: any) => {
-                let result = `${params[0].axisValue}日<br/>`;
+                let result = `${params[0].axisValue}th<br/>`;
                 params.forEach((item: any) => {
                     result += `${item.marker}${item.seriesName}: ${formatCurrency(item.value)}<br/>`;
                 });
@@ -74,7 +74,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, currencySymbol }) 
             },
         },
         legend: {
-            data: ['总收入', '总支出', '结余'],
+            data: ['Total Income', 'Total Expense', 'Balance'],
             top: 'top',
             left: 'center',
             textStyle: {
@@ -107,7 +107,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, currencySymbol }) 
         yAxis: [
             {
                 type: 'value',
-                name: '金额',
+                name: 'Amount',
                 nameTextStyle: {
                     color: getChartColors().text,  // Dynamic color
                 },
@@ -128,7 +128,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, currencySymbol }) 
             },
             {
                 type: 'value',
-                name: '结余',
+                name: 'Balance',
                 nameTextStyle: {
                     color: getChartColors().text,  // Dynamic color
                 },
@@ -148,7 +148,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, currencySymbol }) 
         ],
         series: [
             {
-                name: '总收入',
+                name: 'Total Income',
                 type: 'bar',
                 data: incomeValues,
                 itemStyle: {
@@ -156,7 +156,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, currencySymbol }) 
                 },
             },
             {
-                name: '总支出',
+                name: 'Total Expense',
                 type: 'bar',
                 data: expenseValues,
                 itemStyle: {
@@ -164,7 +164,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, currencySymbol }) 
                 },
             },
             {
-                name: '结余',
+                name: 'Balance',
                 type: 'line',
                 yAxisIndex: 1,
                 data: cumulativeBalance,
@@ -193,7 +193,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, currencySymbol }) 
 
     return (
         <div>
-            <ChartTitle>趋势分析</ChartTitle>
+            <ChartTitle>Trend Analysis</ChartTitle>
             <ChartContainer>
                 <ReactECharts
                     option={trendOption}

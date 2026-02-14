@@ -84,8 +84,8 @@ export const AccountVisualization: React.FC<{
               setMode(e.target.value as 'balance' | 'pnl');
             }}
           >
-            <option value="balance">账户余额</option>
-            <option value="pnl">盈亏</option>
+            <option value="balance">Account Balance</option>
+            <option value="pnl">Profit & Loss</option>
           </select>
         </ChartTypeSelector>
         <Legend>

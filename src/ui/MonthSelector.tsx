@@ -78,19 +78,19 @@ export const MonthSelector: React.FC<MonthSelectorProps> = ({
 
     return (
         <Container>
-            <Title>财务报表</Title>
+            <Title>Financial Report</Title>
             <Controls>
                 {onBack && (
                     <Button disabled={false} onClick={onBack}>
-                        返回账本
+                        Back to Ledger
                     </Button>
                 )}
                 <Button disabled={!canGoPrev} onClick={handlePrevMonth}>
-                    ← 上个月
+                    ← Previous Month
                 </Button>
-                <MonthDisplay>{selectedMonth.format('YYYY年MM月')}</MonthDisplay>
+                <MonthDisplay>{selectedMonth.format('YYYY/MM')}</MonthDisplay>
                 <Button disabled={!canGoNext} onClick={handleNextMonth}>
-                    下个月 →
+                    Next Month →
                 </Button>
             </Controls>
         </Container>

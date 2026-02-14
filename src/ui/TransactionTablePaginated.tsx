@@ -122,22 +122,22 @@ export const TransactionTablePaginated: React.FC<TransactionTablePaginatedProps>
         })}`;
     };
 
-    // 重置页码当交易变化时
+    // Reset page number when transactions change
     React.useEffect(() => {
         setCurrentPage(1);
     }, [transactions.length]);
 
     return (
         <Container>
-            <Title>交易明细</Title>
+            <Title>Transaction Details</Title>
             <Table>
                 <Thead>
                     <Tr>
-                        <Th>日期</Th>
-                        <Th>收款人</Th>
-                        <Th style={{ textAlign: 'right' }}>金额</Th>
-                        <Th>来源账户</Th>
-                        <Th>目标账户</Th>
+                        <Th>Date</Th>
+                        <Th>Payee</Th>
+                        <Th style={{ textAlign: 'right' }}>Amount</Th>
+                        <Th>Source Account</Th>
+                        <Th>Target Account</Th>
                     </Tr>
                 </Thead>
                 <Tbody>
@@ -159,16 +159,16 @@ export const TransactionTablePaginated: React.FC<TransactionTablePaginatedProps>
                         disabled={!canGoPrev}
                         onClick={() => setCurrentPage((p) => p - 1)}
                     >
-                        ← 前一页
+                        ← Previous Page
                     </PageButton>
                     <PageInfo>
-                        第 {currentPage} 页 / 共 {totalPages} 页
+                        Page {currentPage} / Total {totalPages} Pages
                     </PageInfo>
                     <PageButton
                         disabled={!canGoNext}
                         onClick={() => setCurrentPage((p) => p + 1)}
                     >
-                        后一页 →
+                        Next Page →
                     </PageButton>
                 </Pagination>
             )}

@@ -70,7 +70,7 @@ export const KPICards: React.FC<KPICardsProps> = ({ data, currencySymbol }) => {
     return (
         <CardsContainer>
             <Card>
-                <CardLabel>本月结余</CardLabel>
+                <CardLabel>Monthly Balance</CardLabel>
                 <CardValueContainer>
                     <CardIcon isPositive={data.balance >= 0}>
                         {data.balance >= 0 ? '↑' : '↓'}
@@ -82,7 +82,7 @@ export const KPICards: React.FC<KPICardsProps> = ({ data, currencySymbol }) => {
             </Card>
 
             <Card>
-                <CardLabel>本月收入</CardLabel>
+                <CardLabel>Monthly Income</CardLabel>
                 <CardValueContainer>
                     <CardIcon isPositive={true}>↑</CardIcon>
                     <CardValue color="green">{formatCurrency(data.income)}</CardValue>
@@ -90,7 +90,7 @@ export const KPICards: React.FC<KPICardsProps> = ({ data, currencySymbol }) => {
             </Card>
 
             <Card>
-                <CardLabel>本月支出</CardLabel>
+                <CardLabel>Monthly Expense</CardLabel>
                 <CardValueContainer>
                     <CardIcon isPositive={false}>↓</CardIcon>
                     <CardValue color="red">{formatCurrency(data.expense)}</CardValue>
@@ -98,7 +98,7 @@ export const KPICards: React.FC<KPICardsProps> = ({ data, currencySymbol }) => {
             </Card>
 
             <Card>
-                <CardLabel>储蓄率</CardLabel>
+                <CardLabel>Savings Rate</CardLabel>
                 <CardValueContainer>
                     <CardIcon isPositive={data.savingsRate >= 0}>%</CardIcon>
                     <CardValue color={data.savingsRate >= 0 ? 'green' : 'red'}>

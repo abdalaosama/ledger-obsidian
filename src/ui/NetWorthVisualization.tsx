@@ -68,8 +68,8 @@ export const NetWorthVisualization: React.FC<{
 
   return (
     <>
-      <h2>净资产</h2>
-      <i>资产减去负债</i>
+      <h2>Net Worth</h2>
+      <i>Assets minus liabilities</i>
 
       <Chart ref={chartRef}>
         <ChartistGraph data={data} options={options} type={type} />

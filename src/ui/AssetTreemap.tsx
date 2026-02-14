@@ -121,7 +121,7 @@ export const AssetTreemap: React.FC<AssetTreemapProps> = ({ data, currencySymbol
 
     return (
         <div>
-            <ChartTitle>资产结构</ChartTitle>
+            <ChartTitle>Asset Composition</ChartTitle>
             <ChartContainer>
                 <ReactECharts
                     option={treemapOption}

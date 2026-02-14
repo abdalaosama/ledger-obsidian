@@ -22,7 +22,7 @@ export class LedgerView extends TextFileView {
     this.currentFilePath = null;
     this.updateInterface = null;
 
-    this.addAction('pencil', '切换到 Markdown 视图', () => {
+    this.addAction('pencil', 'Switch to Markdown view', () => {
       const state = leaf.view.getState();
       leaf.setViewState(
         {
@@ -114,7 +114,7 @@ export class LedgerView extends TextFileView {
     } else {
       contentEl.empty();
       const span = contentEl.createSpan();
-      span.setText('加载中...');
+      span.setText('Loading...');
     }
   };
 

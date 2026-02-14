@@ -33,7 +33,7 @@ export const DateRangeSelector: React.FC<{
           props.setEndDate(window.moment());
         }}
       >
-        日视图
+        Daily View
       </Button>
       <Button
         selected={props.interval === 'week'}
@@ -43,7 +43,7 @@ export const DateRangeSelector: React.FC<{
           props.setEndDate(window.moment());
         }}
       >
-        周视图
+        Weekly View
       </Button>
       <Button
         selected={props.interval === 'month'}
@@ -53,7 +53,7 @@ export const DateRangeSelector: React.FC<{
           props.setEndDate(window.moment());
         }}
       >
-        月视图
+        Monthly View
       </Button>
     </FlexFloatRight>
   </FlexContainer>

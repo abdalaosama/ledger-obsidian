@@ -62,15 +62,15 @@ export const SankeyChart: React.FC<SankeyChartProps> = ({ data, currencySymbol }
                 emphasis: {
                     focus: 'adjacency',
                 },
-                // ✅ 对称布局：左右接近对称，右侧稍宽以容纳标签
+                // ✅ Symmetric layout: left and right are nearly symmetric, right side is slightly wider to accommodate labels
                 left: '4%',
                 top: '5%',
-                right: '8%',     // 右侧8%，与左侧4%接近对称
+                right: '8%',     // Right 8%, nearly symmetric to left 4%
                 bottom: '5%',
                 nodeWidth: 20,
                 nodeGap: 10,
                 lineStyle: {
-                    color: 'gradient',  // 渐变连线
+                    color: 'gradient',  // Gradient connecting lines
                     curveness: 0.5,
                     opacity: 0.4,
                 },
@@ -80,38 +80,38 @@ export const SankeyChart: React.FC<SankeyChartProps> = ({ data, currencySymbol }
                 label: {
                     show: true,
                     position: 'right',
-                    distance: 5,      // ✅ 紧凑标签间距
+                    distance: 5,      // ✅ Compact label spacing
                     color: getChartColors().text,
                     fontSize: 12,
                 },
                 data: data.nodes.map((node) => {
-                    // ✅ 颜色逻辑：使用includes宽松匹配
-                    let color = '#9CA3AF';  // 默认灰色
+                    // ✅ Color logic: use includes for loose matching
+                    let color = '#9CA3AF';  // Default gray
 
                     const name = node.name || '';
 
-                    // 左侧逻辑
-                    if (name.includes('收入') || name.includes('Income')) {
-                        color = '#10B981';  // 翡翠绿
-                    } else if (name.includes('负债') || name.includes('存量消耗')) {
-                        color = '#F43F5E';  // 红色
-                    } else if (name.includes('余额消费')) {
-                        color = '#3B82F6';  // 蓝色
+                    // Left side logic
+                    if (name.includes('Income') || name.includes('Income')) {
+                        color = '#10B981';  // Emerald green
+                    } else if (name.includes('Debt') || name.includes('Reserve Depletion')) {
+                        color = '#F43F5E';  // Red
+                    } else if (name.includes('Balance Consumption')) {
+                        color = '#3B82F6';  // Blue
                     }
-                    // 右侧逻辑 - 债务偿还
-                    else if (name.includes('债务偿还') || name.includes('Repayment')) {
-                        color = '#F97316';  // 橙色（债务偿还）
+                    // Right side logic - Debt Repayment
+                    else if (name.includes('Debt Repayment') || name.includes('Repayment')) {
+                        color = '#F97316';  // Orange (Debt Repayment)
                     }
-                    // 右侧逻辑 - 所有支出类别变绿
-                    else if (name.includes('支出') || name.includes('Expense') ||
-                        name.includes('保障') || name.includes('餐饮') ||
-                        name.includes('购物') || name.includes('通讯') ||
-                        name.includes('交通') || name.includes('娱乐') ||
-                        name.includes('教育') || name.includes('医疗') ||
-                        name.includes('居住') || name.includes('其他')) {
-                        color = '#34D399';  // 草绿色（支出）
-                    } else if (name.includes('结余') || name.includes('沉淀') || name.includes('Savings')) {
-                        color = '#059669';  // 深绿色（结余）
+                    // Right side logic - All expense categories turn green
+                    else if (name.includes('Expense') || name.includes('Expense') ||
+                        name.includes('Insurance') || name.includes('Dining') ||
+                        name.includes('Shopping') || name.includes('Communication') ||
+                        name.includes('Transportation') || name.includes('Entertainment') ||
+                        name.includes('Education') || name.includes('Medical') ||
+                        name.includes('Housing') || name.includes('Other')) {
+                        color = '#34D399';  // Light green (Expense)
+                    } else if (name.includes('Balance') || name.includes('Savings') || name.includes('Savings')) {
+                        color = '#059669';  // Dark green (Balance)
                     }
 
                     return {
@@ -130,7 +130,7 @@ export const SankeyChart: React.FC<SankeyChartProps> = ({ data, currencySymbol }
 
     return (
         <div>
-            <ChartTitle>全景流向</ChartTitle>
+            <ChartTitle>Financial Flow</ChartTitle>
             <ChartContainer>
                 <ReactECharts
                     option={sankeyOption}

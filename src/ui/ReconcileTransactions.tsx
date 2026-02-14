@@ -228,11 +228,11 @@ export const ReconcileTransactions: React.FC<ReconcileTransactionsProps> = ({
   return (
     <Container>
       <Header>
-        <Title>流水核对</Title>
+        <Title>Statement Reconciliation</Title>
       </Header>
 
       {transactions.length === 0 ? (
-        <EmptyState>暂无未核对的流水</EmptyState>
+        <EmptyState>No unverified transactions</EmptyState>
       ) : (
         <>
           <SelectAllContainer>
@@ -242,7 +242,7 @@ export const ReconcileTransactions: React.FC<ReconcileTransactionsProps> = ({
               onChange={handleSelectAll}
             />
             <span>
-              {allSelected ? '取消全选' : '全选'}
+              {allSelected ? 'Deselect All' : 'Select All'}
             </span>
           </SelectAllContainer>
 
@@ -284,11 +284,11 @@ export const ReconcileTransactions: React.FC<ReconcileTransactionsProps> = ({
 
           <Footer>
             <SelectedCount>
-              已选择: {selectedTxIds.size} 笔交易
+              Selected: {selectedTxIds.size} transactions
             </SelectedCount>
             <ButtonGroup>
               <Button onClick={onClose} disabled={isProcessing}>
-                取消
+                Cancel
               </Button>
               <Button
                 primary
@@ -296,8 +296,8 @@ export const ReconcileTransactions: React.FC<ReconcileTransactionsProps> = ({
                 disabled={selectedTxIds.size === 0 || isProcessing}
               >
                 {isProcessing
-                  ? '处理中...'
-                  : `完成核对 (${selectedTxIds.size})`}
+                  ? 'Processing...'
+                  : `Complete Reconciliation (${selectedTxIds.size})`}
               </Button>
             </ButtonGroup>
           </Footer>
