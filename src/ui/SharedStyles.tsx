@@ -3,6 +3,9 @@ import styled from 'styled-components';
 
 export const FlexContainer = styled.div`
   display: flex;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 export const FlexShrink = styled.div`
   flex-grow: 0;
@@ -11,6 +14,10 @@ export const FlexShrink = styled.div`
 export const FlexFloatRight = styled.div`
   margin-left: auto;
   flex-shrink: 1;
+  @media (max-width: 768px) {
+    margin-left: 0;
+    margin-top: 10px;
+  }
 `;
 export const FlexMainContent = styled.div`
   flex-basis: auto;

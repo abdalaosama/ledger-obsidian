@@ -29,6 +29,10 @@ import styled from 'styled-components';
 
 const FlexSidebar = styled(FlexShrink)`
   flex-basis: 20%;
+  @media (max-width: 768px) {
+    flex-basis: auto;
+    width: 100%;
+  }
 `;
 
 export const LedgerDashboard: React.FC<{
@@ -40,9 +44,7 @@ export const LedgerDashboard: React.FC<{
     return <p>Loading...</p>;
   }
 
-  return Platform.isMobile ? (
-    <MobileDashboard settings={props.settings} txCache={props.txCache} />
-  ) : (
+  return (
     <DesktopDashboard
       settings={props.settings}
       txCache={props.txCache}
