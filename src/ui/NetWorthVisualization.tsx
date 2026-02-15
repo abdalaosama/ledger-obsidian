@@ -96,15 +96,14 @@ export const NetWorthVisualization: React.FC<{
     props.startDate,
     props.endDate,
   );
-  const data = {
-    labels: dateBuckets,
-    series: [
-      makeNetWorthData(
+  const NetworthData = makeNetWorthData(
         props.dailyAccountBalanceMap,
         dateBuckets,
         props.settings,
-      ),
-    ],
+      )
+  const data = {
+    labels: dateBuckets,
+    series: [NetworthData],
   };
 
   const hasNonZeroData = data.series[0].some((d) => d.y !== 0);
@@ -117,9 +116,17 @@ export const NetWorthVisualization: React.FC<{
   };
 
   const type = 'Line';
+  const latestNetWorth = NetworthData.at(-1)?.y || 0;
+  const formattedNetWorth = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 0,
+    trailingZeroDisplay: 'stripIfInteger',
+  }).format(latestNetWorth);
   return (
     <>
-      <h2>Net Worth</h2>
+      <h2>Net Worth: {formattedNetWorth}</h2>
       <i>Assets minus liabilities</i>
 
       {!hasNonZeroData && (

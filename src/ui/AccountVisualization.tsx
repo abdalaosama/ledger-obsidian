@@ -89,6 +89,25 @@ export const AccountVisualization: React.FC<{
       />
     );
 
+
+    const BalanceData =  filteredAccounts.map(account => makeBalanceData(
+        props.dailyAccountBalanceMap,
+        dateBuckets,
+        account,
+        props.allAccounts,
+      ))
+    const TotalBalance = BalanceData.reduce((acc, series) => {
+      const lastPoint = series.at(-1);
+      return acc + (lastPoint?.y || 0);
+    }, 0);
+    const CurrentBalance = TotalBalance;
+    const formattedBalance = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 0,
+        trailingZeroDisplay: 'stripIfInteger',
+    }).format(CurrentBalance);
   return (
     <>
       <ChartHeader>
@@ -103,6 +122,7 @@ export const AccountVisualization: React.FC<{
             <option value="balance">Account Balance</option>
             <option value="pnl">Profit & Loss</option>
           </select>
+          {!filteredAccounts?null:<h2>Current Balance: {formattedBalance}</h2>}
         </ChartTypeSelector>
         <Legend>
           <ul className="ct-legend">
