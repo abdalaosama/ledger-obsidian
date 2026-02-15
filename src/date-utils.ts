@@ -2,6 +2,17 @@ import { getWithDefault } from './generic-utils';
 import { EnhancedTransaction } from './parser';
 import { Moment } from 'moment';
 
+export const parseDate = (dateStr: string): Moment => {
+  const formats = ['YYYY-MM-DD', 'YYYY/MM/DD', 'YYYY.MM.DD'];
+  // Try strict parsing first to avoid warnings
+  let m = window.moment(dateStr, formats, true);
+  if (m.isValid()) return m;
+
+  // Fallback to loose parsing
+  m = window.moment(dateStr);
+  return m;
+};
+
 export type Interval = 'day' | 'week' | 'month';
 
 /**
@@ -43,7 +54,7 @@ export const bucketTransactions = (
   const restBucketMoments: Moment[] = [];
   const buckets = new Map<Moment, EnhancedTransaction[]>();
   bucketNames.forEach((name, i) => {
-    const m = window.moment(name);
+    const m = window.moment(name, 'YYYY-MM-DD');
     buckets.set(m, []);
 
     if (i === 0) {
@@ -57,7 +68,7 @@ export const bucketTransactions = (
   txs.forEach((tx) => {
     let prevBucket = firstBucketMoment;
     for (let i = 0; i < restBucketMoments.length; i++) {
-      const m = window.moment(tx.value.date, ['YYYY-MM-DD', 'YYYY/MM/DD']);
+      const m = parseDate(tx.value.date);
       if (m.isBefore(restBucketMoments[i])) {
         break;
       }
